@@ -9,7 +9,7 @@
 /**
 *	crea y destruye a una lista vacía
 */
-void test_create_destroy_list(void){ //void lo agregue yo
+void test_create_destroy_list(){
 	string_proc_list * list	= string_proc_list_create_asm();
 	string_proc_list_destroy(list);
 	printf("[OK] test_create_destroy_list ejecutado\n");
@@ -18,7 +18,7 @@ void test_create_destroy_list(void){ //void lo agregue yo
 /**
 *	crea y destruye un nodo
 */
-void test_create_destroy_node(void){ //void lo agregue yo
+void test_create_destroy_node(){
 	string_proc_node* node	= string_proc_node_create_asm(0, "hash");
 	string_proc_node_destroy(node);
 	printf("[OK] test_create_destroy_node ejecutado\n");
@@ -27,7 +27,7 @@ void test_create_destroy_node(void){ //void lo agregue yo
 /**
  * 	crea una lista y le agrega nodos
 */
-void test_create_list_add_nodes(void) //void lo agregue yo
+void test_create_list_add_nodes()
 {	
 	string_proc_list * list	= string_proc_list_create_asm();
 	string_proc_list_add_node_asm(list, 0, "hola");
@@ -41,7 +41,7 @@ void test_create_list_add_nodes(void) //void lo agregue yo
  * 	crea una lista y le agrega nodos. Luego aplica la lista a un hash.
 */
 
-void test_list_concat(void) //void lo agregue yo
+void test_list_concat()
 {
 	string_proc_list * list	= string_proc_list_create();
 	string_proc_list_add_node(list, 0, "hola");

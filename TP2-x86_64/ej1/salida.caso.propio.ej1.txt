@@ -15,18 +15,18 @@ List length: 0
 Agregando estrellas:
 
 List length: 12
-	node hash:  | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
+	node hash: sol | type: 2
+	node hash: polaris | type: 3
+	node hash: rigel | type: 7
+	node hash: pollux | type: 0
+	node hash: deneb | type: 1
+	node hash: adhara | type: 1
+	node hash: betelgeuse | type: 2
+	node hash: sirio | type: 1
+	node hash: procyon | type: 6
+	node hash: altair | type: 1
+	node hash: achenar | type: 6
+	node hash: fomalhaut | type: 4
 
 ======================== Libera memoria =======================
 
@@ -35,34 +35,34 @@ Creando lista vacia
 Agregando constelaciones y misiones:
 
 List length: 28
-	node hash: (null) | type: 5
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
-	node hash: (null) | type: 0
+	node hash: geminis | type: 6
+	node hash: pisis | type: 4
+	node hash: cefeo | type: 2
+	node hash: pavo | type: 4
+	node hash: libra | type: 7
+	node hash: auriga | type: 5
+	node hash: sagitario | type: 0
+	node hash: pavo | type: 6
+	node hash: crux | type: 2
+	node hash: cisne | type: 5
+	node hash: orion | type: 3
+	node hash: centauro | type: 2
+	node hash: juno | type: 3
+	node hash: hubble | type: 5
+	node hash: irazusta | type: 2
+	node hash: terra | type: 1
+	node hash: cassini-huygens | type: 5
+	node hash: artemis | type: 3
+	node hash: columbia | type: 4
+	node hash: kepler | type: 3
+	node hash: aqua | type: 6
+	node hash: sputnik | type: 6
+	node hash: insight | type: 2
+	node hash: messenger | type: 0
+	node hash: osiris | type: 3
+	node hash: rex | type: 4
+	node hash: chandra | type: 4
+	node hash: curiosity | type: 6
 
 ======================== Libera memoria =======================
 
@@ -70,12 +70,12 @@ List length: 28
 
 Agregando constelaciones y misiones:
 
-junta-constelaciones-mision-estrellas:
-junta-constelaciones-mision-estrellas:
-junta-constelaciones-mision-estrellas:
-junta-constelaciones-mision-estrellas:
-junta-constelaciones-mision-estrellas:
-junta-constelaciones-mision-estrellas:
-junta-constelaciones-mision-estrellas:
-junta-constelaciones-mision-estrellas:
+junta-constelaciones-mision-estrellas:pisispolluxbetelgeuseachenargeminispavopisissagitarioorionjunoganimedeslunapallas
+junta-constelaciones-mision-estrellas:pavoadharasolaltairsagitariopavocruxhubblerigelpolluxencéladomirandacassini-huygens
+junta-constelaciones-mision-estrellas:geminisaurigacruxpolarispolluxlibracefeocisnegeminisbetelgeusepavocruxcalistohubbleiris
+junta-constelaciones-mision-estrellas:denebprocyonsagitarioorionjunocefeocentauropavocisneoberonumbrielsoyuzcerespalasvictoria
+junta-constelaciones-mision-estrellas:pavorigeldenebcentaurorigelaurigacisnelibracruxpolarisadharajunohebe
+junta-constelaciones-mision-estrellas:cisnepavopavocisnesollibraeuropaarielgalemedeapollo 11issvesta
+junta-constelaciones-mision-estrellas:librasolbetelgeusejunohubblecentauroaurigadenebsiriosagitariolunatitantritónmimasdioneartemis
+junta-constelaciones-mision-estrellas:cefeosagitariosirioorionpolarisadharasiriopisiscefeopavoaurigacruxlibrapavohubblecefeoaurigaiotitaniarheatitánlunajunochandrayaan-2hygieaeris
 ======================== Fin del test 1b =======================

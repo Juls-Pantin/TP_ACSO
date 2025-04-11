@@ -9,6 +9,7 @@ string_proc_list* string_proc_list_create(void){ //crear una lista vacia
 }
 
 string_proc_node* string_proc_node_create(uint8_t type, char* hash){ //crear un nodo
+	if(hash == NULL) return NULL;
 	string_proc_node* node = malloc(sizeof(string_proc_node));
 	if(node == NULL) return NULL;
 	node-> type = type;
@@ -19,6 +20,7 @@ string_proc_node* string_proc_node_create(uint8_t type, char* hash){ //crear un 
 }
 
 void string_proc_list_add_node(string_proc_list* list, uint8_t type, char* hash){// agregar un nodo a la lista
+	if(list == NULL || hash == NULL) return;
 	string_proc_node* new_node = string_proc_node_create(type, hash);
 	if(new_node == NULL) return;
 	if(list->first == NULL){ //si la lista esta vacia
@@ -50,6 +52,7 @@ char* string_proc_list_concat(string_proc_list* list, uint8_t type , char* hash)
 /** AUX FUNCTIONS **/
 
 void string_proc_list_destroy(string_proc_list* list){
+	if(list == NULL) return; //lo puse yo
 
 	/* borro los nodos: */
 	string_proc_node* current_node	= list->first;
