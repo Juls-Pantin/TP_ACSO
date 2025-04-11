@@ -1,4 +1,3 @@
-; /** defines bool y puntero **/
 %define NULL 0
 %define TRUE 1
 %define FALSE 0
@@ -6,22 +5,24 @@
 section .data
 
 section .text
+extern _printf
+extern _strdup
 
-global string_proc_list_create_asm
-global string_proc_node_create_asm
-global string_proc_list_add_node_asm
-global string_proc_list_concat_asm
+global _string_proc_list_create_asm
+global _string_proc_node_create_asm
+global _string_proc_list_add_node_asm
+global _string_proc_list_concat_asm
 
 ; FUNCIONES auxiliares que pueden llegar a necesitar:
-extern malloc
-extern free
-extern str_concat
+extern _malloc
+extern _free
+extern _str_concat
 
 
-string_proc_list_create_asm:
+_string_proc_list_create_asm:
     ;reservar 16 bytes para la lista
     mov rdi, 16     ;argumento de malloc -> rdi = 16
-    call malloc     ;malloc(16), puntero resultante en rax
+    call _malloc     ;malloc(16), puntero resultante en rax
 
     ;verificar si malloc fallo (rax == NULL)
     test rax, rax
@@ -33,12 +34,21 @@ string_proc_list_create_asm:
     ;inicializar list->last = NULL
     mov qword [rax + 8], 0
 
-.return_null
+.return_null:
     ret
 
 
 
-string_proc_node_create_asm:
+_string_proc_node_create_asm:
+    ; debug: imprimir type y hash recibidos
+    push rsi
+    movzx rsi, dil
+    pop rsi
+
+    ;rdi = type(uint8_t)
+    ;rsi = hash(char *)
+
+    ;reservar 32 bytes para el nodo
     ;rdi = type(uint8_t)
     ;rsi = hash(char *)
 
@@ -47,7 +57,7 @@ string_proc_node_create_asm:
     mov rcx, rsi        ;guardamos hash en rcx
 
     mov rdi, 32         ;malloc(32)
-    call malloc         
+    call _malloc         
     test rax, rax
     je .return_null     ;si malloc falla, devolvemos NULL
 
@@ -70,20 +80,25 @@ string_proc_node_create_asm:
 
 
 
-string_proc_list_add_node_asm:
+_string_proc_list_add_node_asm:
     ; rdi = list
     ; rsi = type
     ; rdx = hash
 
-    ; Guardar list en rbx, type en rcx, hash en r8 (para no perderlos)
+    push rbx
+    push r12
+    push r13
+    push r8
+
+    ; Guardar list en rbx, type en r8, hash en rcx (corregido)
     mov rbx, rdi        ; rbx = list
-    mov rcx, rsi        ; rcx = type
-    mov r8, rdx         ; r8 = hash
+    mov r8, rsi         ; r8 = type
+    mov rcx, rdx        ; rcx = hash
 
     ; Llamar a string_proc_node_create_asm(type, hash)
-    mov rdi, rcx        ; rdi = type
-    mov rsi, r8         ; rsi = hash
-    call string_proc_node_create_asm
+    mov rdi, r8         ; rdi = type
+    mov rsi, rcx        ; rsi = hash
+    call _string_proc_node_create_asm
     test rax, rax
     je .return          ; si falla malloc, salimos
 
@@ -114,11 +129,15 @@ string_proc_list_add_node_asm:
     mov [rbx + 8], rax
 
 .return:
+    pop r8
+    pop r13
+    pop r12
+    pop rbx
     ret
 
 
 
-string_proc_list_concat_asm:
+_string_proc_list_concat_asm:
     ; rdi = list
     ; rsi = type
     ; rdx = hash
@@ -135,9 +154,8 @@ string_proc_list_concat_asm:
     mov r8, rdx          ; hash → r8
 
     ; result = str_concat("", hash)
-    lea rdi, [empty_str] ; primer argumento = ""
-    mov rsi, r8          ; segundo argumento = hash
-    call str_concat
+    mov rdi, r8
+    call _strdup
     mov r12, rax         ; r12 = result
 
     ; current = list->first
@@ -155,11 +173,11 @@ string_proc_list_concat_asm:
     ; llamar a str_concat(result, current->hash)
     mov rdi, r12         ; result
     mov rsi, [r13 + 24]  ; current->hash
-    call str_concat      ; retorna nuevo string en rax
+    call _str_concat      ; retorna nuevo string en rax
 
     ; liberar viejo result
     mov rdi, r12
-    call free
+    call _free
 
     ; result = nuevo string
     mov r12, rax
@@ -176,6 +194,3 @@ string_proc_list_concat_asm:
 .ret_null:
     mov rax, 0
     ret
-
-section .data
-empty_str: db "", 0

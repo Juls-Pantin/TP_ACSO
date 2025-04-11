@@ -1,0 +1,19 @@
+---
+triple:          'x86_64-apple-darwin'
+binary-path:     tester
+relocations:
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x1000005B0, symSize: 0x50 }
+  - { offset: 0x4D, size: 0x8, addend: 0x0, symName: _filename_ej1, symObjAddr: 0x2B88, symBinAddr: 0x100005060, symSize: 0x0 }
+  - { offset: 0x5B, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x1000005B0, symSize: 0x50 }
+  - { offset: 0x74, size: 0x8, addend: 0x0, symName: _test_ej1a, symObjAddr: 0x50, symBinAddr: 0x100000600, symSize: 0xCF0 }
+  - { offset: 0xC2, size: 0x8, addend: 0x0, symName: _test_ej1b, symObjAddr: 0xD40, symBinAddr: 0x1000012F0, symSize: 0x1AAC }
+  - { offset: 0x420, size: 0x8, addend: 0x0, symName: _string_proc_list_create, symObjAddr: 0x0, symBinAddr: 0x100002DA0, symSize: 0x50 }
+  - { offset: 0x441, size: 0x8, addend: 0x0, symName: _string_proc_list_create, symObjAddr: 0x0, symBinAddr: 0x100002DA0, symSize: 0x50 }
+  - { offset: 0x469, size: 0x8, addend: 0x0, symName: _string_proc_node_create, symObjAddr: 0x50, symBinAddr: 0x100002DF0, symSize: 0x70 }
+  - { offset: 0x4AD, size: 0x8, addend: 0x0, symName: _string_proc_list_add_node, symObjAddr: 0xC0, symBinAddr: 0x100002E60, symSize: 0x90 }
+  - { offset: 0x4FB, size: 0x8, addend: 0x0, symName: _string_proc_list_concat, symObjAddr: 0x150, symBinAddr: 0x100002EF0, symSize: 0xB0 }
+  - { offset: 0x577, size: 0x8, addend: 0x0, symName: _str_concat, symObjAddr: 0x200, symBinAddr: 0x100002FA0, symSize: 0x80 }
+  - { offset: 0x5E5, size: 0x8, addend: 0x0, symName: _string_proc_list_destroy, symObjAddr: 0x280, symBinAddr: 0x100003020, symSize: 0x70 }
+  - { offset: 0x625, size: 0x8, addend: 0x0, symName: _string_proc_node_destroy, symObjAddr: 0x2F0, symBinAddr: 0x100003090, symSize: 0x50 }
+  - { offset: 0x649, size: 0x8, addend: 0x0, symName: _string_proc_list_print, symObjAddr: 0x340, symBinAddr: 0x1000030E0, symSize: 0x9B }
+...

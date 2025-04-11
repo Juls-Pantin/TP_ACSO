@@ -1,0 +1,81 @@
+== Ejercicio 1a ==
+
+Creando lista vacia
+
+======================== Libera memoria =======================
+
+Creando nodo vacio
+
+======================== Libera memoria =======================
+
+Creando lista vacia
+
+List length: 0
+
+Agregando estrellas:
+
+List length: 12
+	node hash:  | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+
+======================== Libera memoria =======================
+
+Creando lista vacia
+
+Agregando constelaciones y misiones:
+
+List length: 28
+	node hash: (null) | type: 5
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+	node hash: (null) | type: 0
+
+======================== Libera memoria =======================
+
+======================== Fin del test 1a ========================= Ejercicio 1b ==
+
+Agregando constelaciones y misiones:
+
+junta-constelaciones-mision-estrellas:
+junta-constelaciones-mision-estrellas:
+junta-constelaciones-mision-estrellas:
+junta-constelaciones-mision-estrellas:
+junta-constelaciones-mision-estrellas:
+junta-constelaciones-mision-estrellas:
+junta-constelaciones-mision-estrellas:
+junta-constelaciones-mision-estrellas:
+======================== Fin del test 1b =======================
