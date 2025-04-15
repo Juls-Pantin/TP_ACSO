@@ -4,6 +4,14 @@
 #include <stdint.h>
 #define _GNU_SOURCE
 
+#ifndef LOG_INFO
+#define LOG_INFO(x)
+#endif
+
+#ifndef LOG_ERROR
+#define LOG_ERROR(x)
+#endif
+
 string_proc_list* string_proc_list_create(void){ //crear una lista vacia
 	string_proc_list* list = malloc(sizeof(string_proc_list));
 	if(list == NULL) return NULL;
