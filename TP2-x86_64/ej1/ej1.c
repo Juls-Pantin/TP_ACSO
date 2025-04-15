@@ -112,7 +112,14 @@ void string_proc_list_print(string_proc_list* list, FILE* file){
         fprintf( file, "List length: %d\n", length );
 		current_node    = list->first;
         while(current_node != NULL){
-                fprintf(file, "\tnode hash: %s | type: %d\n", current_node->hash, current_node->type);
+                /*fprintf(file, "\tnode hash: %s | type: %d\n", current_node->hash, current_node->type);
                 current_node = current_node->next;
-        }
+				*/
+			if (current_node->hash == NULL) {
+				fprintf(file, "\tnode hash: (null) | type: %d\n", current_node->type);
+			} else {
+				fprintf(file, "\tnode hash: %s | type: %d\n", current_node->hash, current_node->type);
+			}
+			current_node = current_node->next;
+				}
 }
