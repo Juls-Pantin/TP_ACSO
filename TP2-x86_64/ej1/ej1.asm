@@ -5,24 +5,24 @@
 section .data
 
 section .text
-extern _printf
-extern _strdup
+extern printf
+extern strdup
 
-global _string_proc_list_create_asm
-global _string_proc_node_create_asm
-global _string_proc_list_add_node_asm
-global _string_proc_list_concat_asm
+global string_proc_list_create_asm
+global string_proc_node_create_asm
+global string_proc_list_add_node_asm
+global string_proc_list_concat_asm
 
 ; FUNCIONES auxiliares que pueden llegar a necesitar:
-extern _malloc
-extern _free
-extern _str_concat
+extern malloc
+extern free
+extern str_concat
 
 
-_string_proc_list_create_asm:
+string_proc_list_create_asm:
     ;reservar 16 bytes para la lista
     mov rdi, 16     ;argumento de malloc -> rdi = 16
-    call _malloc     ;malloc(16), puntero resultante en rax
+    call malloc     ;malloc(16), puntero resultante en rax
 
     ;verificar si malloc fallo (rax == NULL)
     test rax, rax
@@ -39,7 +39,7 @@ _string_proc_list_create_asm:
 
 
 
-_string_proc_node_create_asm:
+string_proc_node_create_asm:
     ; debug: imprimir type y hash recibidos
     push rsi
     movzx rsi, dil
@@ -57,7 +57,7 @@ _string_proc_node_create_asm:
     mov rcx, rsi        ;guardamos hash en rcx
 
     mov rdi, 32         ;malloc(32)
-    call _malloc         
+    call malloc         
     test rax, rax
     je .return_null     ;si malloc falla, devolvemos NULL
 
@@ -80,7 +80,7 @@ _string_proc_node_create_asm:
 
 
 
-_string_proc_list_add_node_asm:
+string_proc_list_add_node_asm:
     ; rdi = list
     ; rsi = type
     ; rdx = hash
@@ -98,7 +98,7 @@ _string_proc_list_add_node_asm:
     ; Llamar a string_proc_node_create_asm(type, hash)
     mov rdi, r8         ; rdi = type
     mov rsi, rcx        ; rsi = hash
-    call _string_proc_node_create_asm
+    call string_proc_node_create_asm
     test rax, rax
     je .return          ; si falla malloc, salimos
 
@@ -137,7 +137,7 @@ _string_proc_list_add_node_asm:
 
 
 
-_string_proc_list_concat_asm:
+string_proc_list_concat_asm:
     ; rdi = list
     ; rsi = type
     ; rdx = hash
@@ -155,7 +155,7 @@ _string_proc_list_concat_asm:
 
     ; result = str_concat("", hash)
     mov rdi, r8
-    call _strdup
+    call strdup
     mov r12, rax         ; r12 = result
 
     ; current = list->first
@@ -173,11 +173,11 @@ _string_proc_list_concat_asm:
     ; llamar a str_concat(result, current->hash)
     mov rdi, r12         ; result
     mov rsi, [r13 + 24]  ; current->hash
-    call _str_concat      ; retorna nuevo string en rax
+    call str_concat      ; retorna nuevo string en rax
 
     ; liberar viejo result
     mov rdi, r12
-    call _free
+    call free
 
     ; result = nuevo string
     mov r12, rax

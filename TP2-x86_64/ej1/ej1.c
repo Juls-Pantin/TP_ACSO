@@ -1,5 +1,8 @@
 #include "ej1.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#define _GNU_SOURCE
 
 string_proc_list* string_proc_list_create(void){ //crear una lista vacia
 	string_proc_list* list = malloc(sizeof(string_proc_list));
@@ -14,7 +17,7 @@ string_proc_node* string_proc_node_create(uint8_t type, char* hash){ //crear un 
 	string_proc_node* node = malloc(sizeof(string_proc_node));
 	if(node == NULL) return NULL;
 	node-> type = type;
-	node->hash = hash;
+	node->hash = strdup(hash);
 	node->next = NULL;
 	node->previous = NULL;
 	return node;
