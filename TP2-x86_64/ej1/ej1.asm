@@ -18,14 +18,6 @@ extern malloc
 extern free
 extern str_concat
 
-#ifndef LOG_INFO
-#define LOG_INFO(x)
-#endif
-
-#ifndef LOG_ERROR
-#define LOG_ERROR(x)
-#endif
-
 string_proc_list_create_asm:
     ;reservar 16 bytes para la lista
     mov rdi, 16     ;argumento de malloc -> rdi = 16

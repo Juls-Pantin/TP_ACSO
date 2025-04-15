@@ -1,8 +1,8 @@
+#define _GNU_SOURCE
 #include "ej1.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#define _GNU_SOURCE
 
 #ifndef LOG_INFO
 #define LOG_INFO(x)
