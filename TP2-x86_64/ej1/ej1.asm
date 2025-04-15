@@ -72,7 +72,9 @@ string_proc_node_create_asm:
     mov byte [rax + 16], dl     ;(type estaba en rdx -> parte baja dl)
 
     ;escribir hash
-    mov qword[rax + 24], rcx    ;(hash estaba en rcx)
+    mov rdi, rcx        ; hash original → rdi
+    call strdup         ; strdup(hash)
+    mov [rax + 24], rax ; node->hash = strdup(hash)
 
 .return_null:
     ret
