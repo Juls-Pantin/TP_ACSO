@@ -1,7 +1,7 @@
-CC=cc
-CFLAGS = -target x86_64-apple-macos11 -Wall -Wextra -pedantic -O0 -g -Wno-unused-variable -Wno-unused-parameter
+CC=c99
+CFLAGS= -Wall -Wextra -pedantic -O0 -g -lm -Wno-unused-variable -Wno-unused-parameter -no-pie -z noexecstack
 NASM=nasm
-NASMFLAGS=-f macho64 -g
+NASMFLAGS=-f elf64 -g -F DWARF
 
 all: main tester
 
