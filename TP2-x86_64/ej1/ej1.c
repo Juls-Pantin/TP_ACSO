@@ -1,4 +1,5 @@
 #include "ej1.h"
+#include <stdio.h>
 
 string_proc_list* string_proc_list_create(void){ //crear una lista vacia
 	string_proc_list* list = malloc(sizeof(string_proc_list));
@@ -30,29 +31,33 @@ void string_proc_list_add_node(string_proc_list* list, uint8_t type, char* hash)
 		new_node -> previous = list -> last;
 		list -> last -> next = new_node;
 		list -> last = new_node;
-		}
-}
-
-char* string_proc_list_concat(string_proc_list* list, uint8_t type , char* hash){// concatenar los hashes de la lista
-	if(list == NULL || hash == NULL) return NULL;
-	char* result = strdup(hash); // inicializo el resultado con el hash pasado por parametro
-	string_proc_node* current = list->first;
-	while(current != NULL){
-		if(current->type == type){
-			char* temp = str_concat(result, current->hash);
-			free(result);
-			result = temp;
-		}
-		current = current->next;
 	}
-	return result;
-}
+	//list -> last -> next = new_node;
+	}
 
+char* string_proc_list_concat(string_proc_list* list, uint8_t type , char* hash){ 
+    LOG_INFO("Concatenating hashes from the string processing list");
+    if(list == NULL || hash == NULL) {
+        LOG_ERROR("List or hash is NULL");
+        return NULL;
+    }
+    char* result = strdup(hash); 
+    string_proc_node* current = list->first;
+    while(current != NULL){
+        if(current->type == type){
+            char* temp = str_concat(result, current->hash);
+            free(result);
+            result = temp;
+        }
+        current = current->next;
+    }
+    LOG_INFO("Hashes concatenated successfully");
+    return result;
+}
 
 /** AUX FUNCTIONS **/
 
 void string_proc_list_destroy(string_proc_list* list){
-	if(list == NULL) return; //lo puse yo
 
 	/* borro los nodos: */
 	string_proc_node* current_node	= list->first;
