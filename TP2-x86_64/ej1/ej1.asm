@@ -135,7 +135,7 @@ string_proc_list_concat_asm:
     ; result = str_concat("", hash)
     mov rdi, empty_string
     mov rsi, r8
-    call strdup
+    call str_concat
     mov r12, rax         ; r12 = result
 
     ; current = list->first
