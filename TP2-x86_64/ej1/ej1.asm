@@ -74,8 +74,11 @@ string_proc_node_create_asm:
     ;escribir hash
     mov rdi, rcx        ; hash original → rdi
     call strdup         ; strdup(hash)
-    mov [rax + 24], rax ; node->hash = strdup(hash)
-
+    mov [rax + 24], rax ; INCORRECT: overwriting node pointer with hash
+    mov rcx, rax        ; rcx = strdup result
+    mov rax, rdi        ; restore node pointer from rdi
+    mov [rax + 24], rcx ; node->hash = strdup(hash)
+    
 .return_null:
     ret
 
