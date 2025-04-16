@@ -99,10 +99,18 @@ string_proc_list_concat_asm:
     mov rdi, 1
     call malloc
     test rax, rax
-    je .loop_error
+    je .loop_error_init     ; <-- nuevo: si malloc falla, salta
     mov byte [rax], 0
     mov r11, rax
-    mov r12, [r8] 
+    jmp .after_malloc       ; <-- salta al resto del código
+
+    .loop_error_init:       ; <-- nuevo label
+    xor r11, r11            ; inicializa r11 en 0
+    jmp .loop_error
+
+    .after_malloc:          ; <-- nuevo label
+    mov r12, [r8]
+
 
 .loop:
     test r12, r12
