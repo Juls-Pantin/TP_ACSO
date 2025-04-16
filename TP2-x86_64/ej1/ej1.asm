@@ -55,7 +55,6 @@ string_proc_node_create_asm:
     mov rdx, rdi        ;guardamos type en rdx (porque rdi se pisa en malloc)
     mov rcx, rsi        ;guardamos hash en rcx
 
-    mov rbx, rdx        ; preserve node pointer location after malloc
     mov rdi, 32         ;malloc(32)
     call malloc         
     test rax, rax
@@ -72,12 +71,11 @@ string_proc_node_create_asm:
     ;escribir type (1 byte)
     mov byte [rax + 16], dl     ;(type estaba en rdx -> parte baja dl)
 
-    ;escribir hash
-    mov rdi, rcx        ; hash original → rdi
-    call strdup         ; strdup(hash)
-    mov rcx, rax        ; rcx = strdup result
-    mov rax, rbx        ; restore node pointer from rbx
-    mov [rax + 24], rcx ; node->hash = strdup(hash)
+    ;guardar el puntero al nodo en rbx antes de llamar a strdup
+    mov rbx, rax        ; rax = puntero al nodo
+    mov rdi, rcx        ; rdi = hash (original string)
+    call strdup         ; strdup(hash), resultado en rax
+    mov [rbx + 24], rax ; node->hash = strdup(hash)
     
 .return_null:
     ret
