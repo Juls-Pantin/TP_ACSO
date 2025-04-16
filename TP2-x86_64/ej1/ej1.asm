@@ -151,6 +151,8 @@ string_proc_list_concat_asm:
     call str_concat
     test rax, rax
     je .concat_fail
+    mov rdi, rax
+    call free
     ret
 
 .concat_fail:
