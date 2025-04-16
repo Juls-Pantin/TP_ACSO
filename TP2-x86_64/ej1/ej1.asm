@@ -119,7 +119,7 @@ string_proc_list_concat_asm:
     mov r11, rax
 
 .next:
-    mov r12, [r12]
+    mov r12, [r12+0]
     jmp .loop
 
 .done:
