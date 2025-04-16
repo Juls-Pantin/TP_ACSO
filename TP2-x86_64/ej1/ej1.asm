@@ -131,8 +131,8 @@ string_proc_list_concat_asm:
     test r10, r10
     je .return_final
 
-    mov rdi, r11
-    mov rsi, r10
+    mov rdi, r10
+    mov rsi, r11
     call str_concat
     test rax, rax
     je .concat_fail
