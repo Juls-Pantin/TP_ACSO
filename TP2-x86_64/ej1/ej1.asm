@@ -1,8 +1,5 @@
 %define NULL 0
 
-section .data
-empty_string: db 0
-
 section .text
 
 extern malloc
@@ -64,22 +61,22 @@ string_proc_list_add_node_asm:
     call string_proc_node_create_asm
     test rax, rax
     je .return
-    mov r11, rax       ; new_node
+    mov r11, rax    
 
-    mov rax, [r8]      ; list->first
+    mov rax, [r8]     
     test rax, rax
     jne .not_empty
 
     ; lista vacía
-    mov [r8], r11      ; first = new_node
-    mov [r8 + 8], r11  ; last = new_node
+    mov [r8], r11      
+    mov [r8 + 8], r11  
     jmp .return
 
 .not_empty:
-    mov rax, [r8 + 8]        ; list->last
-    mov [r11 + 8], rax       ; new_node->previous = list->last
-    mov [rax], r11           ; list->last->next = new_node
-    mov [r8 + 8], r11        ; list->last = new_node
+    mov rax, [r8 + 8]      
+    mov [r11 + 8], rax      
+    mov [rax], r11           
+    mov [r8 + 8], r11       
 
 .return:
     ret
@@ -103,7 +100,7 @@ string_proc_list_concat_asm:
     call str_concat
     mov r11, rax
 
-    mov r12, [r8]  ; current = list->first
+    mov r12, [r8] 
 
 .loop:
     test r12, r12
@@ -122,8 +119,8 @@ string_proc_list_concat_asm:
     call free
     mov r11, r13
 
-.next:
-    mov r12, [r12 + 0]  ; current = current->next
+.advance:
+    mov r12, [r12]  ; current = current->next
     jmp .loop
 
 .done:
@@ -135,3 +132,6 @@ string_proc_list_concat_asm:
     mov rsi, r10
     call str_concat
     ret
+
+section .data
+empty_string: db 0
