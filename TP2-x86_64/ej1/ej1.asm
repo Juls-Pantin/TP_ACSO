@@ -126,10 +126,10 @@ string_proc_list_concat_asm:
     mov cl, sil          ; type (uint8_t) → cl
     mov r8, rdx          ; hash → r8
 
-    ; result = str_concat("", hash)
-    mov rdi, r8
-    call strdup
-    mov r12, rax         ; r12 = result
+    mov rdi, empty_string
+    mov rsi, r8
+    call str_concat
+    mov r12, rax
 
     ; current = list->first
     mov r13, [rbx]       ; r13 = current
