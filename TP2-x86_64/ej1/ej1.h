@@ -5,8 +5,8 @@
 #include <assert.h>
 #include <stdbool.h>
 
-// #define USE_ASM_IMPL 1
-#define USE_ASM_IMPL 0
+#define USE_ASM_IMPL 1 // Cambiar a 0 para usar la implementacion en C
+
 
 /** Lista **/
 typedef struct string_proc_list_t {
