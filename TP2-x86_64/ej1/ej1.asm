@@ -119,14 +119,19 @@ string_proc_list_concat_asm:
     test rax, rax
     je .concat_fail
     mov r13, rax
+
+    ; r11 != r10 y r11 != empty_string
     cmp r11, r10
+    je .skip_free_r11
+    lea rax, [rel empty_string]
+    cmp r11, rax
     je .skip_free_r11
     test r11, r11
     je .skip_free_r11
     mov rdi, r11
     call free
     .skip_free_r11:
-    
+
     mov r11, r13
 
 .next_node:
@@ -143,8 +148,16 @@ string_proc_list_concat_asm:
     test rax, rax
     je .concat_fail
     mov r13, rax
+    cmp r11, r10
+    je .skip_free_combine
+    lea rax, [rel empty_string]
+    cmp r11, rax
+    je .skip_free_combine
+    test r11, r11
+    je .skip_free_combine
     mov rdi, r11
     call free
+    .skip_free_combine:
     mov r11, r13
 
 .return_final:
