@@ -116,11 +116,11 @@ string_proc_list_concat_asm:
     mov r13, rax
 
     mov rdi, r11
-    call free
+    ; call free no lo hacemos
     mov r11, r13
 
 .next:
-    mov r12, [r12 + 0]  ; current = current->next
+    mov r12, [r12 + 0]
     jmp .loop
 
 .done:
