@@ -90,24 +90,16 @@ string_proc_list_add_node_asm:
     je .lista_vacia
 
 .lista_no_vacia:
-    ; new_node->previous = list->last
-    mov rcx, [rbx + 8]       ; rcx = list->last
-    mov [rax + 8], rcx       ; new_node->previous = rcx
-
-    ; list->last->next = new_node
-    mov [rcx], rax           ; list->last->next = new_node
-
-    ; list->last = new_node
-    mov [rbx + 8], rax
+    mov rcx, [rbx + 8]           ; rcx = list->last
+    mov qword [rax + 8], rcx     ; new_node->previous = list->last
+    mov qword [rcx], rax         ; list->last->next = new_node
+    mov qword [rbx + 8], rax     ; list->last = new_node
 
     jmp .return
 
 .lista_vacia:
-    ; list->first = new_node
-    mov [rbx], rax
-
-    ; list->last = new_node
-    mov [rbx + 8], rax
+    mov qword [rbx], rax         ; list->first = new_node
+    mov qword [rbx + 8], rax     ; list->last = new_node
 
 .return:
     pop r8
