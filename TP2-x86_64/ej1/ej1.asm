@@ -115,12 +115,13 @@ string_proc_list_concat_asm:
     mov rdi, r11
     mov rsi, [r12 + 24]
     call str_concat
-    mov r13, rax
+    test rax, rax
+    je .loop_error
 
     mov rdi, r11
     call free
 
-    mov r11, r13
+    mov r11, rax
 
 .next:
     mov r12, [r12]
@@ -133,22 +134,26 @@ string_proc_list_concat_asm:
     mov rdi, r10
     mov rsi, r11
     call str_concat
+    test rax, rax
+    je .loop_error
     mov r13, rax
 
-    cmp r11, r10
-    je .skip_free
     mov rdi, r11
     call free
-
-.skip_free:
     mov r11, r13
 
 .done:
     mov rax, r11
     ret
 
+.loop_error:
+    xor rax, rax
+    ret
+
 .copy_only_hash:
     mov rdi, empty_string
     mov rsi, r10
     call str_concat
+    test rax, rax
+    je .loop_error
     ret 
