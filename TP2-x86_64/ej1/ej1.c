@@ -25,7 +25,7 @@ string_proc_node* string_proc_node_create(uint8_t type, char* hash){ //crear un 
 	string_proc_node* node = malloc(sizeof(string_proc_node));
 	if(node == NULL) return NULL;
 	node-> type = type;
-	node->hash = strdup(hash);
+	node->hash = hash;
 	node->next = NULL;
 	node->previous = NULL;
 	return node;
@@ -43,7 +43,6 @@ void string_proc_list_add_node(string_proc_list* list, uint8_t type, char* hash)
 		list -> last -> next = new_node;
 		list -> last = new_node;
 	}
-	//list -> last -> next = new_node;
 	}
 
 char* string_proc_list_concat(string_proc_list* list, uint8_t type , char* hash){ 
@@ -112,14 +111,7 @@ void string_proc_list_print(string_proc_list* list, FILE* file){
         fprintf( file, "List length: %d\n", length );
 		current_node    = list->first;
         while(current_node != NULL){
-                /*fprintf(file, "\tnode hash: %s | type: %d\n", current_node->hash, current_node->type);
+                fprintf(file, "\tnode hash: %s | type: %d\n", current_node->hash, current_node->type);
                 current_node = current_node->next;
-				*/
-			if (current_node->hash == NULL) {
-				fprintf(file, "\tnode hash: (null) | type: %d\n", current_node->type);
-			} else {
-				fprintf(file, "\tnode hash: %s | type: %d\n", current_node->hash, current_node->type);
-			}
-			current_node = current_node->next;
-				}
+		}
 }
