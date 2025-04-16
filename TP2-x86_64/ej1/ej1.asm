@@ -1,4 +1,6 @@
 %define NULL 0
+%define TRUE 1
+%define FALSE 0
 
 section .data
 empty_string: db 0
@@ -94,18 +96,17 @@ string_proc_list_concat_asm:
     test rax, rax
     je .copy_only_hash
 
-    mov rdi, empty_string
-    mov rsi, r10
-    call str_concat
+    mov rdi, 1
+    call malloc
     test rax, rax
     je .copy_only_hash
+    mov byte [hash], 0
     mov r11, rax
-
     mov r12, [r8] 
 
 .loop:
     test r12, r12
-    je .done
+    je .concat_hash
 
     movzx eax, byte [r12 + 16]
     cmp eax, r9d
@@ -114,14 +115,30 @@ string_proc_list_concat_asm:
     mov rdi, r11
     mov rsi, [r12 + 24]
     call str_concat
-    test rax, rax
-    je .done
-    mov r11, rax
+    mov r13, rax
+
+    mov rdi, r11
+    call free
+
+    mov r11, r13
 
 .next:
-    mov r12, [r12+0]
+    mov r12, [r12]
     jmp .loop
 
+.concat_hash:
+    test r10, r10
+    je .done
+
+    mov rdi, r10
+    mov rsi, r11
+    call str_concat
+    mov r13, rax
+
+    mov rdi, r11
+    call free
+    mov r11, r13
+    
 .done:
     mov rax, r11
     ret
