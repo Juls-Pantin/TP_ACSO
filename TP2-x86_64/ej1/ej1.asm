@@ -104,8 +104,9 @@ string_proc_list_concat_asm:
     test r12, r12
     je .done
 
-    movzx eax, byte [r12 + 16]
-    cmp eax, r9d
+    ; current->type (uint8_t) vs type (uint8_t)
+    mov al, [r12 + 16]
+    cmp al, r9b
     jne .next_node
 
     mov rdi, r11
@@ -115,7 +116,6 @@ string_proc_list_concat_asm:
 
     mov rdi, r11
     call free
-
     mov r11, r13
 
 .next_node:
