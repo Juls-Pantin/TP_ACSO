@@ -55,6 +55,7 @@ string_proc_node_create_asm:
     mov rdx, rdi        ;guardamos type en rdx (porque rdi se pisa en malloc)
     mov rcx, rsi        ;guardamos hash en rcx
 
+    mov rbx, rdx        ; preserve node pointer location after malloc
     mov rdi, 32         ;malloc(32)
     call malloc         
     test rax, rax
@@ -74,9 +75,8 @@ string_proc_node_create_asm:
     ;escribir hash
     mov rdi, rcx        ; hash original → rdi
     call strdup         ; strdup(hash)
-    mov [rax + 24], rax ; INCORRECT: overwriting node pointer with hash
     mov rcx, rax        ; rcx = strdup result
-    mov rax, rdi        ; restore node pointer from rdi
+    mov rax, rbx        ; restore node pointer from rbx
     mov [rax + 24], rcx ; node->hash = strdup(hash)
     
 .return_null:
