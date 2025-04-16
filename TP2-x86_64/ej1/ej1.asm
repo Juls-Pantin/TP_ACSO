@@ -138,9 +138,14 @@ string_proc_list_concat_asm:
     je .loop_error
     mov r13, rax
 
+    cmp r11, r10
+    je .skip_free_concat
     mov rdi, r11
     call free
+    .skip_free_concat:
+
     mov r11, r13
+
 
 .done:
     mov rax, r11
@@ -152,8 +157,16 @@ string_proc_list_concat_asm:
     call str_concat
     test rax, rax
     je .loop_error
-    ret 
+    mov r11, rax
+    mov rax, r11
+    ret
+
 
 .loop_error:
+    test r11, r11
+    je .no_free
+    mov rdi, r11
+    call free
+.no_free:
     xor rax, rax
     ret
