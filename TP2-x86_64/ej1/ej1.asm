@@ -123,7 +123,7 @@ string_proc_list_concat_asm:
     mov r11, r13
 
 .next:
-    mov r12, [r12]  ; current = current->next
+    mov r12, [r12 + 0]  ; current = current->next
     jmp .loop
 
 .done:
