@@ -37,49 +37,25 @@ string_proc_list_create_asm:
     ret
 
 
-
 string_proc_node_create_asm:
-    ; debug: imprimir type y hash recibidos
-    push rsi
-    movzx rsi, dil
-    pop rsi
-
-    ;rdi = type(uint8_t)
-    ;rsi = hash(char *)
-
-    ;reservar 32 bytes para el nodo
-    ;rdi = type(uint8_t)
-    ;rsi = hash(char *)
-
-    ;reservar 32 bytes para el nodo
-    mov rdx, rdi        ;guardamos type en rdx (porque rdi se pisa en malloc)
-    mov rcx, rsi        ;guardamos hash en rcx
+    movzx rdx, dil      
+    mov r10, rsi
 
     mov rdi, 32         ;malloc(32)
     call malloc         
     test rax, rax
-    je .return_null     ;si malloc falla, devolvemos NULL
+    je .return_null     
 
-    ;rax = puntero al nodo
-
-    ;inicializar next = NULL
-    mov qword[rax + 0], 0
-
-    ;inicializar previous = NULL
-    mov qword[rax + 8], 0
-
-    ;escribir type (1 byte)
-    mov byte [rax + 16], dl     ;(type estaba en rdx -> parte baja dl)
-
-    ;guardar el puntero al nodo en rbx antes de llamar a strdup
-    mov rbx, rax        ; rax = puntero al nodo
-    mov rdi, rcx        ; rdi = hash (original string)
-    call strdup         ; strdup(hash), resultado en rax
-    mov [rbx + 24], rax ; node->hash = strdup(hash)
+    mov qword [rax], 0       ; next = NULL
+    mov qword [rax + 8], 0   ; previous = NULL
+    mov byte [rax + 16], dl  ; type
+    mov qword [rax + 24], r10 ; hash (no strdup!)
     
-.return_null:
     ret
 
+.return_null:
+    mov rax, 0
+    ret
 
 
 string_proc_list_add_node_asm:
