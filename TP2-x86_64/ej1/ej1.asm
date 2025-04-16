@@ -51,10 +51,7 @@ string_proc_node_create_asm:
     mov qword [rbx], 0       ; next
     mov qword [rbx + 8], 0   ; previous
     mov byte  [rbx + 16], dl ; type
-
-    mov rdi, r10
-    call strdup
-    mov [rbx + 24], rax      ; node->hash = strdup(hash)
+    mov [rbx + 24], r10      ; node->hash = hash (sin strdup!)
 
     mov rax, rbx
     ret
