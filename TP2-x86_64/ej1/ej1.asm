@@ -39,19 +39,24 @@ string_proc_list_create_asm:
 
 
 string_proc_node_create_asm:
-    movzx rdx, dil      
-    mov r10, rsi
+    movzx rdx, dil       ; type -> rdx
+    mov r10, rsi         ; hash -> r10
 
-    mov rdi, 32         ;malloc(32)
-    call malloc         
+    mov rdi, 32
+    call malloc
     test rax, rax
-    je .return_null     
+    je .return_null
 
-    mov qword [rax], 0       ; next = NULL
-    mov qword [rax + 8], 0   ; previous = NULL
-    mov byte [rax + 16], dl  ; type
-    mov qword [rax + 24], r10 ; hash (no strdup!)
-    
+    mov rbx, rax         ; backup del nodo
+    mov qword [rbx], 0       ; next
+    mov qword [rbx + 8], 0   ; previous
+    mov byte  [rbx + 16], dl ; type
+
+    mov rdi, r10
+    call strdup
+    mov [rbx + 24], rax      ; node->hash = strdup(hash)
+
+    mov rax, rbx
     ret
 
 .return_null:
