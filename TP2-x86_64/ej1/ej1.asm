@@ -56,9 +56,8 @@ string_proc_list_add_node_asm:
     movzx r9d, sil
     mov r10, rdx
 
-    xor edi, edi         ; Limpiamos edi antes de cargar el tipo
-    mov dil, sil         ; Pasamos correctamente el uint8_t al arg1
-    mov rsi, rdx         ; Ya estaba bien (hash)
+    movzx edi, sil 
+    mov rsi, rdx         
     call string_proc_node_create_asm
     test rax, rax
     je .return
