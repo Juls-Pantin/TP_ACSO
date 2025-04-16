@@ -119,7 +119,7 @@ string_proc_list_concat_asm:
     call free
     mov r11, r13
 
-.advance:
+.next:
     mov r12, [r12]  ; current = current->next
     jmp .loop
 
