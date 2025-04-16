@@ -119,8 +119,14 @@ string_proc_list_concat_asm:
     test rax, rax
     je .concat_fail
     mov r13, rax
+    cmp r11, r10
+    je .skip_free_r11
+    test r11, r11
+    je .skip_free_r11
     mov rdi, r11
     call free
+
+.skip_free_r11:
     mov r11, r13
 
 .next_node:
@@ -151,8 +157,6 @@ string_proc_list_concat_asm:
     call str_concat
     test rax, rax
     je .concat_fail
-    mov rdi, rax
-    call free
     ret
 
 .concat_fail:
