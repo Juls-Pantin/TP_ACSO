@@ -138,9 +138,8 @@ string_proc_list_concat_asm:
     mov r8, rdx          ; hash → r8
 
     ; result = str_concat("", hash)
-    mov rdi, empty_string
-    mov rsi, r8
-    call str_concat
+    mov rdi, r8
+    call strdup
     mov r12, rax         ; r12 = result
 
     ; current = list->first
