@@ -59,10 +59,9 @@ string_proc_list_add_node_asm:
     mov dil, r9b
     mov rsi, r10
     call string_proc_node_create_asm
-    mov r11, rax
-
-    test r11, r11
+    test rax, rax
     je .return
+    mov r11, rax
 
     mov rax, [r8]
     test rax, rax
@@ -93,19 +92,19 @@ string_proc_list_concat_asm:
     test rax, rax
     je .copy_only_hash
 
+    ; result = str_concat("", hash)
     mov rdi, empty_string
     mov rsi, r10
     call str_concat
     mov r11, rax
 
-    mov r12, [r8]
+    mov r12, [r8]  ; current = list->first
 
 .loop:
     test r12, r12
     je .done
 
-    ; current->type (uint8_t) vs type (uint8_t)
-    mov al, [r12 + 16]
+    mov al, [r12 + 16]  ; current->type
     cmp al, r9b
     jne .next_node
 
@@ -116,6 +115,7 @@ string_proc_list_concat_asm:
 
     mov rdi, r11
     call free
+
     mov r11, r13
 
 .next_node:
