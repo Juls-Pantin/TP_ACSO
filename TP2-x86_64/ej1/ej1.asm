@@ -118,6 +118,7 @@ string_proc_list_concat_asm:
     mov r11, rax
 
     mov r12, [r8]
+
 .scan_nodes:
     test r12, r12
     je .combine_hash
@@ -168,6 +169,8 @@ string_proc_list_concat_asm:
     test rax, rax
     je .concat_fail
     pop rbp
+    mov r11, rax
+    mov rax, r11
     ret
 
 .concat_fail:
