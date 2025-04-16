@@ -3,6 +3,7 @@
 %define FALSE 0
 
 section .data
+empty_string: db 0
 
 section .text
 extern printf
@@ -132,8 +133,9 @@ string_proc_list_concat_asm:
     mov r8, rdx          ; hash → r8
 
     ; result = str_concat("", hash)
+    mov rsi, empty_string
     mov rdi, r8
-    call strdup
+    call str_concat
     mov r12, rax         ; r12 = result
 
     ; current = list->first
