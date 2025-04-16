@@ -124,7 +124,6 @@ string_proc_list_concat_asm:
     test r11, r11
     je .skip_free_r11
     mov rdi, r11
-    call free
 
 .skip_free_r11:
     mov r11, r13
