@@ -135,8 +135,12 @@ string_proc_list_concat_asm:
     call str_concat
     mov r13, rax
 
+    cmp r11, r10
+    je .skip_free
     mov rdi, r11
     call free
+
+.skip_free:
     mov r11, r13
 
 .done:
