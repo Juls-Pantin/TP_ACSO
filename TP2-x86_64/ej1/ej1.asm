@@ -115,7 +115,7 @@ string_proc_list_concat_asm:
     call str_concat
     mov r13, rax
 
-    mov rdi, r11
+    ; mov rdi, r11
     ; call free no lo hacemos
     mov r11, r13
 
