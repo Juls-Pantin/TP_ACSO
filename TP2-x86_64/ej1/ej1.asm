@@ -130,7 +130,7 @@ string_proc_list_concat_asm:
     je .skip_free_r11
     mov rdi, r11
     call free
-    
+
 .skip_free_r11:
     mov r11, r13
 
@@ -155,9 +155,6 @@ string_proc_list_concat_asm:
     je .skip_free_r11
     mov rdi, r11
     call free
-
-.skip_free_r11:
-    mov r11, r13
 
 .return_final:
     mov rax, r11
