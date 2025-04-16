@@ -1,4 +1,6 @@
 %define NULL 0
+%define TRUE 1
+%define FALSE 0
 
 section .data
 empty_string: db 0
@@ -8,57 +10,60 @@ section .text
 extern malloc
 extern free
 extern str_concat
+extern strlen
+extern strcpy
 
 global string_proc_list_create_asm
 global string_proc_node_create_asm
 global string_proc_list_add_node_asm
 global string_proc_list_concat_asm
 
-; ================================
-; Crear lista vacía
-; ================================
+; -----------------------------------------------
 string_proc_list_create_asm:
+    push rbp
     mov rdi, 16
     call malloc
     test rax, rax
-    je .fail_list
+    je .return_null_list
     mov qword [rax], NULL
     mov qword [rax + 8], NULL
+    pop rbp
     ret
-.fail_list:
-    xor rax, rax
+.return_null_list:
+    mov rax, NULL
+    pop rbp
     ret
 
-; ================================
-; Crear nodo con tipo y hash
-; ================================
+;------------------------------------------------
 string_proc_node_create_asm:
+    push rbp
     test rsi, rsi
-    je .fail_node
+    je .return_null_node
     mov r10, rsi
     movzx r11d, dil
     mov rdi, 32
     call malloc
     test rax, rax
-    je .fail_node
+    je .return_null_node
     mov qword [rax], NULL
     mov qword [rax + 8], NULL
     mov byte [rax + 16], r11b
     mov qword [rax + 24], r10
+    pop rbp
     ret
-.fail_node:
-    xor rax, rax
+.return_null_node:
+    mov rax, NULL
+    pop rbp
     ret
 
-; ================================
-; Agregar nodo a lista
-; ================================
+;-----------------------------------------------
 string_proc_list_add_node_asm:
+    push rbp
     test rdi, rdi
     je .done_add
-    mov r8, rdi        ; list
-    mov r9, rdx        ; hash
-    mov r10d, esi      ; type
+    mov r8, rdi
+    mov r9, rdx
+    mov r10d, esi
 
     mov dil, sil
     mov rsi, r9
@@ -71,7 +76,6 @@ string_proc_list_add_node_asm:
     test rax, rax
     jne .append
 
-    ; Lista vacía
     mov [r8], r11
     mov [r8 + 8], r11
     jmp .done_add
@@ -83,32 +87,40 @@ string_proc_list_add_node_asm:
     mov [r8 + 8], r11
 
 .done_add:
+    pop rbp
     ret
 
-; ================================
-; Concatenar hashes
-; ================================
+; --------------------------------------------------
 string_proc_list_concat_asm:
-    ; rdi = list, sil = type, rdx = hash
+    push rbp
     test rdi, rdi
     je .just_return_hash
+    test rdx, rdx
+    je .just_return_hash
+
     mov r8, rdi
     movzx r9d, sil
     mov r10, rdx
 
-    mov rdi, 1
+    push r12
+    mov r12, rdx
+    mov rdi, rdx
+    call strlen
+    inc rax
+    mov rdi, rax
     call malloc
     test rax, rax
-    je .concat_fail
-    mov byte [rax], 0
+    je .return_null_concat
+    mov rsi, r12
+    mov rdi, rax
+    call strcpy
+    pop r12
     mov r11, rax
 
     mov r12, [r8]
-
 .scan_nodes:
     test r12, r12
     je .combine_hash
-
     movzx eax, byte [r12 + 16]
     cmp eax, r9d
     jne .next_node
@@ -119,10 +131,14 @@ string_proc_list_concat_asm:
     test rax, rax
     je .concat_fail
     mov r13, rax
+    cmp r11, r10
+    je .skip_free
+    test r11, r11
+    je .skip_free
     mov rdi, r11
     call free
+.skip_free:
     mov r11, r13
-
 .next_node:
     mov r12, [r12]
     jmp .scan_nodes
@@ -130,7 +146,6 @@ string_proc_list_concat_asm:
 .combine_hash:
     test r10, r10
     je .return_final
-
     mov rdi, r10
     mov rsi, r11
     call str_concat
@@ -143,6 +158,7 @@ string_proc_list_concat_asm:
 
 .return_final:
     mov rax, r11
+    pop rbp
     ret
 
 .just_return_hash:
@@ -151,8 +167,15 @@ string_proc_list_concat_asm:
     call str_concat
     test rax, rax
     je .concat_fail
+    pop rbp
     ret
 
 .concat_fail:
     xor rax, rax
+    pop rbp
+    ret
+
+.return_null_concat:
+    xor rax, rax
+    pop rbp
     ret
