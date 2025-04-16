@@ -49,7 +49,10 @@ string_proc_node_create_asm:
     mov qword [rax], 0       ; next = NULL
     mov qword [rax + 8], 0   ; previous = NULL
     mov byte [rax + 16], dl  ; type
-    mov qword [rax + 24], r10 ; hash (no strdup!)
+    mov rbx, rax        ; guardar puntero al nodo
+    mov rdi, r10        ; rdi = hash
+    call strdup         ; duplicar el hash
+    mov [rbx + 24], rax ; guardar en node->hash
     
     ret
 
