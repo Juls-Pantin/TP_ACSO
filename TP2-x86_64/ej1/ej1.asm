@@ -99,7 +99,7 @@ string_proc_list_concat_asm:
     mov rdi, 1
     call malloc
     test rax, rax
-    je .copy_only_hash
+    je .loop_error
     mov byte [rax], 0
     mov r11, rax
     mov r12, [r8] 
@@ -146,10 +146,6 @@ string_proc_list_concat_asm:
     mov rax, r11
     ret
 
-.loop_error:
-    xor rax, rax
-    ret
-
 .copy_only_hash:
     mov rdi, empty_string
     mov rsi, r10
@@ -157,3 +153,7 @@ string_proc_list_concat_asm:
     test rax, rax
     je .loop_error
     ret 
+
+.loop_error:
+    xor rax, rax
+    ret
