@@ -1,16 +1,4 @@
-#define _GNU_SOURCE
 #include "ej1.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
-#ifndef LOG_INFO
-#define LOG_INFO(x)
-#endif
-
-#ifndef LOG_ERROR
-#define LOG_ERROR(x)
-#endif
 
 string_proc_list* string_proc_list_create(void){ //crear una lista vacia
 	string_proc_list* list = malloc(sizeof(string_proc_list));
