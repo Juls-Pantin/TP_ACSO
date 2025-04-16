@@ -1,5 +1,8 @@
 %define NULL 0
 
+section .data
+empty_string: db 0
+
 section .text
 
 extern malloc
@@ -27,7 +30,6 @@ string_proc_list_create_asm:
 
 ; -------------------------------------------------------------
 string_proc_node_create_asm:
-    ; rdi: type (uint8_t), rsi: hash
     movzx rdx, dil
     mov r10, rsi
 
@@ -36,10 +38,10 @@ string_proc_node_create_asm:
     test rax, rax
     je .return_null_node
 
-    mov qword [rax], 0         ; next = NULL
-    mov qword [rax + 8], 0     ; previous = NULL
-    mov byte [rax + 16], dl    ; type
-    mov qword [rax + 24], r10  ; hash
+    mov qword [rax], 0       
+    mov qword [rax + 8], 0    
+    mov byte [rax + 16], dl   
+    mov qword [rax + 24], r10  
     ret
 
 .return_null_node:
@@ -48,7 +50,6 @@ string_proc_node_create_asm:
 
 ; -------------------------------------------------------------
 string_proc_list_add_node_asm:
-    ; rdi: list, sil: type, rdx: hash
     test rdi, rdi
     je .return
 
@@ -67,7 +68,6 @@ string_proc_list_add_node_asm:
     test rax, rax
     jne .not_empty
 
-    ; lista vacía
     mov [r8], r11      
     mov [r8 + 8], r11  
     jmp .return
@@ -83,21 +83,22 @@ string_proc_list_add_node_asm:
 
 ; -------------------------------------------------------------
 string_proc_list_concat_asm:
-    ; rdi: list, sil: type, rdx: hash
     mov r8, rdi
     movzx r9d, sil
     mov r10, rdx
 
     test r8, r8
     je .copy_only_hash
+
     mov rax, [r8]
     test rax, rax
     je .copy_only_hash
 
-    ; result = str_concat("", hash)
     mov rdi, empty_string
     mov rsi, r10
     call str_concat
+    test rax, rax
+    je .copy_only_hash
     mov r11, rax
 
     mov r12, [r8] 
@@ -113,14 +114,12 @@ string_proc_list_concat_asm:
     mov rdi, r11
     mov rsi, [r12 + 24]
     call str_concat
-    mov r13, rax
-
-    ; mov rdi, r11
-    ; call free no lo hacemos
-    mov r11, r13
+    test rax, rax
+    je .done
+    mov r11, rax
 
 .next:
-    mov r12, [r12 + 0]
+    mov r12, [r12]
     jmp .loop
 
 .done:
@@ -131,7 +130,4 @@ string_proc_list_concat_asm:
     mov rdi, empty_string
     mov rsi, r10
     call str_concat
-    ret
-
-section .data
-empty_string: db 0
+    ret 
