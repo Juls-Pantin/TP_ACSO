@@ -51,7 +51,8 @@ char* string_proc_list_concat(string_proc_list* list, uint8_t type , char* hash)
         LOG_ERROR("List or hash is NULL");
         return NULL;
     }
-    char* result = strdup(hash); 
+    char* result = malloc(strlen(hash) + 1);
+	if (result) strcpy(result, hash);
     string_proc_node* current = list->first;
     while(current != NULL){
         if(current->type == type){
