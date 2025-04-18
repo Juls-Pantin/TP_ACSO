@@ -28,11 +28,11 @@ string_proc_list_create_asm:
     mov rdi, STRUCT_LIST_SIZE
     call malloc
     cmp rax, 0
-    je .fail
+    je .fallo
     mov qword [rax + OFFSET_NEXT], NULL
     mov qword [rax + OFFSET_PREV], NULL
     ret
-.fail:
+.fallo:
     xor rax, rax
     ret
 
@@ -46,7 +46,7 @@ string_proc_node_create_asm:
     push r12
 
     cmp rsi, 0
-    je .node_fail
+    je .fallo_nodo
 
     mov r12, rsi
     mov bl, dil
@@ -54,7 +54,7 @@ string_proc_node_create_asm:
     mov rdi, STRUCT_NODE_SIZE
     call malloc
     cmp rax, 0
-    je .node_fail
+    je .fallo_nodo
 
     mov qword [rax + OFFSET_NEXT], NULL
     mov qword [rax + OFFSET_PREV], NULL
@@ -66,7 +66,7 @@ string_proc_node_create_asm:
     pop rbp
     ret
 
-.node_fail:
+.fallo_nodo:
     xor rax, rax
     pop r12
     pop rbx
@@ -91,25 +91,25 @@ string_proc_list_add_node_asm:
     mov rsi, r14
     call string_proc_node_create_asm
     cmp rax, 0
-    je .end
+    je .fin
 
     mov rcx, rax       
 
     mov rax, [rbx]
     cmp rax, 0
-    jne .not_empty
+    jne .no_vacio
 
     mov [rbx], rcx
     mov [rbx + 8], rcx
-    jmp .end
+    jmp .fin
 
-.not_empty:
+.no_vacio:
     mov rdx, [rbx + 8]  
     mov [rdx], rcx     
     mov [rcx + 8], rdx 
     mov [rbx + 8], rcx  
 
-.end:
+.fin:
     pop r14
     pop r13
     pop rbx
@@ -144,41 +144,41 @@ string_proc_list_concat_asm:
 
 .loop:
     cmp r15, 0
-    je .after
+    je .siguiente
 
     mov al, byte [r15 + 16]
     cmp al, r12b
-    jne .skip
+    jne .salto
 
     mov rdi, r14
     mov rsi, [r15 + 24]
     call str_concat
     test rax, rax
-    je .fail
+    je .fallo
 
     mov rdi, r14
     mov r14, rax
     call free
 
-.skip:
+.salto:
     mov r15, [r15]
     jmp .loop
 
-.after:
+.siguiente:
     cmp r13, 0
-    je .add
+    je .agregar
 
     mov rdi, r13
     mov rsi, r14
     call str_concat
     cmp rax, 0
-    je .fail
+    je .fallo
 
     mov rdi, r14
     mov r14, rax
     call free
 
-.add:
+.agregar:
     mov rdi, rbx
     movzx rsi, r12b
     mov rdx, r14
@@ -194,13 +194,13 @@ string_proc_list_concat_asm:
     pop rbp
     ret
 
-.fail:
+.fallo:
     test r14, r14
-    je .null
+    je .nulo
     mov rdi, r14
     call free
 
-.null:
+.nulo:
     xor rax, rax
     add rsp, 32
     pop r15
