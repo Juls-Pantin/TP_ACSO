@@ -35,17 +35,27 @@ string_proc_list_create_asm:
 string_proc_node_create_asm:
     test rsi, rsi
     je .fail_node
-    mov r10, rsi
+
+    mov rdi, empty_string
+    mov rsi, rsi
+    call str_concat
+    test rax, rax
+    je .fail_node
+    mov r10, rax
+
     movzx r11d, dil
+
     mov rdi, 32
     call malloc
     test rax, rax
     je .fail_node
-    mov qword [rax], NULL
-    mov qword [rax + 8], NULL
-    mov byte [rax + 16], r11b
-    mov qword [rax + 24], r10
+
+    mov qword [rax], NULL            ; next
+    mov qword [rax + 8], NULL        ; previous
+    mov byte [rax + 16], r11b        ; type
+    mov qword [rax + 24], r10        ; hash duplicado
     ret
+    
 .fail_node:
     xor rax, rax
     ret
