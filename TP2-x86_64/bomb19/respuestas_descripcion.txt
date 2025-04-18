@@ -1,0 +1,47 @@
+Nombre : Julia Pantin
+Email: jpantin@udesa.edu.ar
+
+Fase 1
+
+Tipo: Texto
+Descripcion: Analice el desensamblado de 'phase_1' con 'objdump' y 'gdb', identifique una llamda a 'strcmp' con una string embebida, lo cual indicaba que se comparaba la entrada con una frase textual exacta.
+Solucion: Al que es amigo, jamas lo dejen en la estacada Siempre el amigo mas fiel es una conducta honrada
+
+
+Fase 2
+
+Tipo: Numero + numero largo(entero y long)
+Descripcion: Mediante 'disas phase_2', identifique que se extraia el primer valor con 'sscanf', luego se verificaba que fuera igual a '2015' (mov inmediato). Luego se extraia el segundo valor de 64 bits, y se comparaba con '0x800000000', es decir '2147483648'.
+Solucion: 2015 2147483648
+
+
+Fase 3
+
+Tipo: Palabra y numero
+Descripcion: 'phase_3' usaba una funcion llamada 'cuenta', que comparaba la palabra ingresada con un arreglo de palabras. El segundo numero debia coincidir con el indice correcto de la palabra dentro del arreglo.
+Utilice GDB para inspeccionar el contenido del arreglo y ver que palabra estaba en cada posicion, haciendo 'x/s' a cada direccion. Al encontrar "abalizar" como palabra en el indice correcto (cuando eax==edx), supe que ese era el input correcto.
+Solucion: abalizar 10
+
+
+Fase 4
+
+Tipo: Dos numeros
+Descripcion: Esta fase realiza una especie de recorrido sobre un arreglo de enteros llamado 'array.0' y suma valores llegar al numero '0xf'(15). 
+Luego, compara la suma con el segundo numero ingresado.
+Fui seteado breakpoints en cada comparacion, y probando valores hasta encontrar la combinacion donde 'ecx == valor_ingresado' y 'edx == 13' (cantidad de pasos).
+Solucion: 4 101
+
+
+Secret Phase
+
+Tipo: Un solo numero
+Descripcion: Explorando con 'info functions', identifique una funcion secreta llamada 'secret_phase' que usaba una funcion recursiva llamada 'fun7'. Esta realizaba un recorrido sobre un arbol binario de busqueda (BST) empezando en un nodo 'n1' con valor 36.
+Use 'x/d' para inspeccionar el valor de 'n1' y verifique que ese era el valor que hacia que la funcion fun7(n1, 36) devolviera 0, y asi se evitaba la bomba en la fase secreta.
+Aunque mi bomba no llamaba automaticamente a 'secret_phase', pude comprobar que el valor correcto era: 36.
+
+
+Input.txt final utilizado para desactivarla:
+Al que es amigo, jamas lo dejen en la estacada Siempre el amigo mas fiel es una conduta honrada
+2015 2147483648
+abalizar 10
+4 101 
