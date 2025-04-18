@@ -52,7 +52,7 @@ string_proc_node_create_asm:
 
     mov qword [rax], NULL
     mov qword [rax + 8], NULL
-    mov byte  [rax + 16], rb
+    mov byte  [rax + 16], rbp
     mov qword [rax + 24], r12
 
     pop r12
@@ -81,7 +81,7 @@ string_proc_list_add_node_asm:
     mov r13, rsi        ; type
     mov r14, rdx        ; hash
 
-    movzx edi, r13
+    movzx edi, r13b
     mov rsi, r14
     call string_proc_node_create_asm
     test rax, rax
@@ -175,7 +175,7 @@ string_proc_list_concat_asm:
 
 .add:
     mov rdi, rbx
-    mov rsi, r12b
+    movzx rsi, r12b
     mov rdx, r14
     call string_proc_list_add_node_asm
 
