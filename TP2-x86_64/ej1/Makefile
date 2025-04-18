@@ -1,5 +1,6 @@
 CC=c99
-CFLAGS= -Wall -Wextra -pedantic -O0 -g -lm -Wno-unused-variable -Wno-unused-parameter -no-pie -z noexecstack
+USE_ASM_IMPL ?= 0
+CFLAGS = -DUSE_ASM_IMPL=$(USE_ASM_IMPL) -Wall -Wextra -pedantic -O0 -g -lm -Wno-unused-variable -Wno-unused-parameter -no-pie -z noexecstack
 NASM=nasm
 NASMFLAGS=-f elf64 -g -F DWARF
 
