@@ -150,7 +150,7 @@ string_proc_list_concat_asm:
 
 .add_node:
     mov rdi, r8     ; list
-    mov rsi, r9b    ; type
+    movzx rsi, r9b    ; type
     mov rdx, r11    ; hash
     call string_proc_list_add_node_asm
 
