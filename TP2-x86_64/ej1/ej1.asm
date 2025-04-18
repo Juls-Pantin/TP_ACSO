@@ -152,8 +152,8 @@ string_proc_list_concat_asm:
 .concat_fail:
     test r11, r11
     je .concat_null
-    mov rdi, r11
-    call free
+    ;mov rdi, r11
+    ;call free
 
 .concat_null:
     xor rax, rax
