@@ -77,9 +77,9 @@ string_proc_list_add_node_asm:
     push r13
     push r14
 
-    mov rbx, rdi        ; list
-    mov r13, rsi        ; type
-    mov r14, rdx        ; hash
+    mov rbx, rdi      
+    mov r13, rsi  
+    mov r14, rdx       
 
     movzx edi, r13b
     mov rsi, r14
@@ -87,7 +87,7 @@ string_proc_list_add_node_asm:
     test rax, rax
     je .end
 
-    mov rcx, rax        ; new_node
+    mov rcx, rax     
 
     mov rax, [rbx]
     test rax, rax
@@ -98,10 +98,10 @@ string_proc_list_add_node_asm:
     jmp .end
 
 .not_empty:
-    mov rdx, [rbx + 8]  ; list->last
-    mov [rdx], rcx      ; last->next = new_node
-    mov [rcx + 8], rdx  ; new_node->previous = last
-    mov [rbx + 8], rcx  ; list->last = new_node
+    mov rdx, [rbx + 8]  
+    mov [rdx], rcx    
+    mov [rcx + 8], rdx  
+    mov [rbx + 8], rcx  
 
 .end:
     pop r14
@@ -123,19 +123,18 @@ string_proc_list_concat_asm:
     push r14
     push r15
 
-    mov rbx, rdi        ; list
-    movzx r12d, sil     ; type
-    mov r13, rdx        ; hash
+    mov rbx, rdi        
+    movzx r12d, sil    
+    mov r13, rdx        
 
-    ; str vacía inicial
     mov rdi, 1
     call malloc
     test rax, rax
     je .null
     mov byte [rax], 0
-    mov r14, rax        ; current_concat
+    mov r14, rax        
 
-    mov r15, [rbx]      ; nodo actual
+    mov r15, [rbx]     
 
 .loop:
     test r15, r15
