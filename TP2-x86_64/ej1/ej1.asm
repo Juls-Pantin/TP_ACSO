@@ -56,7 +56,7 @@ string_proc_node_create_asm:
 ; ================================
 string_proc_list_add_node_asm:
     test rdi, rdi
-    je .done_add
+    je .done
 
     mov r8, rdi        ; list
     mov r9b, sil        ; type
