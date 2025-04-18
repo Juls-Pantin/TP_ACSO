@@ -1,18 +1,15 @@
 %define NULL 0
 
-section .data
-empty_string: db 0
-
 section .text
-
-extern malloc
-extern free
-extern str_concat
 
 global string_proc_list_create_asm
 global string_proc_node_create_asm
 global string_proc_list_add_node_asm
 global string_proc_list_concat_asm
+
+extern malloc
+extern free
+extern str_concat
 
 ; ================================
 ; Crear lista vacía
@@ -21,11 +18,11 @@ string_proc_list_create_asm:
     mov rdi, 16
     call malloc
     test rax, rax
-    je .fail_list
+    je .return_null
     mov qword [rax], NULL
     mov qword [rax + 8], NULL
     ret
-.fail_list:
+.return_null:
     xor rax, rax
     ret
 
@@ -34,29 +31,23 @@ string_proc_list_create_asm:
 ; ================================
 string_proc_node_create_asm:
     test rsi, rsi
-    je .fail_node
+    je .node_fail
 
-    mov rdi, empty_string
-    mov rsi, rsi
-    call str_concat
-    test rax, rax
-    je .fail_node
-    mov r10, rax
-
-    movzx r11d, dil
+    mov r10b, dil
+    mov r11, rsi
 
     mov rdi, 32
     call malloc
     test rax, rax
-    je .fail_node
+    je .node_fail
 
-    mov qword [rax], NULL            ; next
-    mov qword [rax + 8], NULL        ; previous
-    mov byte [rax + 16], r11b        ; type
-    mov qword [rax + 24], r10        ; hash duplicado
+    mov qword [rax], NULL     
+    mov qword [rax + 8], NULL    
+    mov byte [rax + 16], r10b
+    mov qword [rax + 24], r11       
     ret
 
-.fail_node:
+.node_fail:
     xor rax, rax
     ret
 
@@ -68,13 +59,14 @@ string_proc_list_add_node_asm:
     je .done_add
 
     mov r8, rdi        ; list
-    mov r9, rdx        ; hash
-    movzx edi, sil     ; pasar el type a dil correctamente
-    mov rsi, r9        ; pasar hash
+    mov r9b, sil        ; type
+    mov r10, rdx        ; hash
 
+    movzx edi, r9b
+    mov rsi, r10
     call string_proc_node_create_asm
     test rax, rax
-    je .done_add
+    je .done
     mov r11, rax
 
     mov rax, [r8]
@@ -84,24 +76,24 @@ string_proc_list_add_node_asm:
     ; Lista vacía
     mov [r8], r11
     mov [r8 + 8], r11
-    jmp .done_add
+    jmp .done
 
 .append:
-    mov r12, [r8 + 8]
-    mov [r12], r11
-    mov [r11 + 8], r12
+    mov rcx, [r8 + 8]
+    mov [rcx], r11
+    mov [r11 + 8], rcx
     mov [r8 + 8], r11
 
-.done_add:
+.done:
     ret
 
 ; ================================
 ; Concatenar hashes 
 ; ================================
 string_proc_list_concat_asm:
-    ; rdi = list, sil = type, rdx = hash
     test rdi, rdi
-    je .just_return_hash
+    je .concat_null
+
     mov r8, rdi
     movzx r9d, sil
     mov r10, rdx
@@ -109,60 +101,48 @@ string_proc_list_concat_asm:
     mov rdi, 1
     call malloc
     test rax, rax
-    je .concat_fail
+    je .concat_null
     mov byte [rax], 0
     mov r11, rax
 
-    mov r12, [r8]
+    mov rax, [r8]
 
-.scan_nodes:
-    test r12, r12
+.concat_loop:
+    test rax, rax
     je .combine_hash
 
-    movzx eax, byte [r12 + 16]
-    cmp eax, r9d
-    jne .next_node
+    mov bl, [rax + 16]
+    cmp bl, r9b
+    jne .next
 
     mov rdi, r11
-    mov rsi, [r12 + 24]
+    mov rsi, [rax + 24]
     call str_concat
-    test rax, rax
-    je .concat_fail
-    mov r13, rax
+    mov r12, rax
     mov rdi, r11
     call free
-    mov r11, r13
+    mov r11, r12
 
-.next_node:
-    mov r12, [r12]
-    jmp .scan_nodes
+.next:
+    mov rax, [rax]
+    jmp .concat_loop
 
 .combine_hash:
     test r10, r10
-    je .return_final
+    je .return_concat
 
     mov rdi, r10
     mov rsi, r11
     call str_concat
-    test rax, rax
-    je .concat_fail
-    mov r13, rax
+    mov r12, rax
     mov rdi, r11
     call free
-    mov r11, r13
+    mov r11, r12
 
-.return_final:
+.return_concat:
     mov rax, r11
     ret
 
-.just_return_hash:
-    mov rdi, empty_string
-    mov rsi, rdx
-    call str_concat
-    test rax, rax
-    je .concat_fail
-    ret
-
-.concat_fail:
+.concat_null:
     xor rax, rax
     ret
