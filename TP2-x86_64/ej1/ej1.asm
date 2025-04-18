@@ -34,10 +34,7 @@ string_proc_list_create_asm:
 ; Crear nodo con tipo y hash
 ;==================================
 string_proc_node_create_asm:
-    push rbp
     mov rbp, rsp
-    push rbx
-    push r12
 
     test rsi, rsi
     je .node_fail
@@ -55,28 +52,16 @@ string_proc_node_create_asm:
     mov byte  [rax + 16], bl
     mov qword [rax + 24], r12
 
-    pop r12
-    pop rbx
-    pop rbp
     ret
 
 .node_fail:
     xor rax, rax
-    pop r12
-    pop rbx
-    pop rbp
     ret
 
 ;==================================
 ; Agregar nodo a lista
 ;==================================
 string_proc_list_add_node_asm:
-    push rbp
-    mov rbp, rsp
-    push rbx
-    push r13
-    push r14
-
     mov rbx, rdi      
     mov r13, rsi  
     mov r14, rdx       
@@ -104,25 +89,12 @@ string_proc_list_add_node_asm:
     mov [rbx + 8], rcx  
 
 .end:
-    pop r14
-    pop r13
-    pop rbx
-    pop rbp
     ret
 
 ;===========================================================
 ; Concatenar todos los hashes del tipo y agregar nuevo nodo
 ;===========================================================
 string_proc_list_concat_asm:
-    push rbp
-    mov rbp, rsp
-    sub rsp, 32
-    push rbx
-    push r12
-    push r13
-    push r14
-    push r15
-
     mov rbx, rdi        
     movzx r12d, sil    
     mov r13, rdx        
@@ -180,12 +152,6 @@ string_proc_list_concat_asm:
 
     mov rax, r14
     add rsp, 32
-    pop r15
-    pop r14
-    pop r13
-    pop r12
-    pop rbx
-    pop rbp
     ret
 
 .fail:
@@ -197,10 +163,4 @@ string_proc_list_concat_asm:
 .null:
     xor rax, rax
     add rsp, 32
-    pop r15
-    pop r14
-    pop r13
-    pop r12
-    pop rbx
-    pop rbp
     ret
