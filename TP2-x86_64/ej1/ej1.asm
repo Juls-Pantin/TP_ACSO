@@ -37,7 +37,7 @@ string_proc_node_create_asm:
     push rbp
     mov rbp, rsp
     push rbx
-    push r12
+    push r10
 
     test rsi, rsi
     je .node_fail
@@ -53,16 +53,16 @@ string_proc_node_create_asm:
     mov qword [rax], NULL
     mov qword [rax + 8], NULL
     mov byte  [rax + 16], bl
-    mov qword [rax + 24], r12
+    mov qword [rax + 24], r10
 
-    pop r12
+    pop r10
     pop rbx
     pop rbp
     ret
 
 .node_fail:
     xor rax, rax
-    pop r12
+    pop r10
     pop rbx
     pop rbp
     ret
@@ -74,14 +74,14 @@ string_proc_list_add_node_asm:
     push rbp
     mov rbp, rsp
     push rbx
-    push r13
+    push r11
     push r14
 
-    mov rbx, rdi        ; list
-    mov r13, rsi        ; type
-    mov r14, rdx        ; hash
+    mov rbx, rdi       
+    mov r11, rsi       
+    mov r14, rdx       
 
-    movzx edi, r13b
+    movzx edi, r11b
     mov rsi, r14
     call string_proc_node_create_asm
     test rax, rax
@@ -98,14 +98,14 @@ string_proc_list_add_node_asm:
     jmp .end
 
 .not_empty:
-    mov rdx, [rbx + 8]  ; list->last
-    mov [rdx], rcx      ; last->next = new_node
-    mov [rcx + 8], rdx  ; new_node->previous = last
-    mov [rbx + 8], rcx  ; list->last = new_node
+    mov rdx, [rbx + 8] 
+    mov [rdx], rcx      
+    mov [rcx + 8], rdx  
+    mov [rbx + 8], rcx  
 
 .end:
     pop r14
-    pop r13
+    pop r11
     pop rbx
     pop rbp
     ret
@@ -118,14 +118,14 @@ string_proc_list_concat_asm:
     mov rbp, rsp
     sub rsp, 32
     push rbx
-    push r12
-    push r13
+    push r10
+    push r11
     push r14
     push r15
 
     mov rbx, rdi        ; list
-    movzx r12d, sil     ; type
-    mov r13, rdx        ; hash
+    movzx r10d, sil     ; type
+    mov r11, rdx        ; hash
 
     ; str vacía inicial
     mov rdi, 1
@@ -142,7 +142,7 @@ string_proc_list_concat_asm:
     je .after
 
     mov al, byte [r15 + 16]
-    cmp al, r12b
+    cmp al, r10b
     jne .skip
 
     mov rdi, r14
@@ -160,10 +160,10 @@ string_proc_list_concat_asm:
     jmp .loop
 
 .after:
-    test r13, r13
+    test r11, r13
     je .add
 
-    mov rdi, r13
+    mov rdi, r11
     mov rsi, r14
     call str_concat
     test rax, rax
@@ -175,7 +175,7 @@ string_proc_list_concat_asm:
 
 .add:
     mov rdi, rbx
-    movzx rsi, r12b
+    movzx rsi, r10b
     mov rdx, r14
     call string_proc_list_add_node_asm
 
@@ -183,8 +183,8 @@ string_proc_list_concat_asm:
     add rsp, 32
     pop r15
     pop r14
-    pop r13
-    pop r12
+    pop r11
+    pop r10
     pop rbx
     pop rbp
     ret
@@ -200,8 +200,8 @@ string_proc_list_concat_asm:
     add rsp, 32
     pop r15
     pop r14
-    pop r13
-    pop r12
+    pop r11
+    pop r10
     pop rbx
     pop rbp
     ret
