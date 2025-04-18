@@ -52,7 +52,7 @@ string_proc_node_create_asm:
 
     mov qword [rax], NULL
     mov qword [rax + 8], NULL
-    mov byte  [rax + 16], rbp
+    mov byte  [rax + 16], bl
     mov qword [rax + 24], r12
 
     pop r12
