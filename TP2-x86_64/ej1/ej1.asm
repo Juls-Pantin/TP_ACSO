@@ -11,178 +11,149 @@ section .text
     extern free
     extern str_concat
 
+==================================
 ; Crear lista vacía
-data_structure_init:
+==================================
+string_proc_node_create_asm:
     mov rdi, 16
     call malloc
     test rax, rax
     je .fail
     mov qword [rax], 0
-    mov qword [rax+8], 0
+    mov qword [rax + 8], 0
     ret
 .fail:
     xor rax, rax
     ret
 
-string_proc_list_create_asm:
-    push rbp
-    mov rbp, rsp
-    call data_structure_init
-    pop rbp
-    ret
-
+==================================
 ; Crear nodo con tipo y hash
+==================================
 string_proc_node_create_asm:
-    push rbp
-    mov rbp, rsp
-    push rbx
-    push r10
-
     test rsi, rsi
-    je .error_node
+    je .node_fail
 
-    mov bl, dil
-    mov r10, rsi
+    mov r10b, dil       ; guardar type
+    mov r11, rsi        ; guardar hash
 
     mov rdi, 32
     call malloc
     test rax, rax
-    je .error_node
+    je .node_fail
 
-    mov qword [rax], 0
-    mov qword [rax+8], 0
-    mov byte [rax+16], bl
-    mov qword [rax+24], r10
-
-    pop r10
-    pop rbx
-    pop rbp
+    mov qword [rax], 0          ; next
+    mov qword [rax + 8], 0      ; previous
+    mov byte [rax + 16], r10b   ; type
+    mov qword [rax + 24], r11   ; hash
     ret
 
-.error_node:
+.node_fail:
     xor rax, rax
-    pop r10
-    pop rbx
-    pop rbp
     ret
 
+==================================
 ; Agregar nodo a lista
+==================================
 string_proc_list_add_node_asm:
-    push rbp
-    mov rbp, rsp
-    push r8
-    push r9
-    push r10
+    test rdi, rdi
+    je .done
 
-    mov r8, rdi
-    mov r9, rsi
-    mov r10, rdx
+    mov r8, rdi     ; list
+    mov r9, rdx     ; hash
+    movzx ecx, sil  ; type
 
-    movzx edi, r9b
-    mov rsi, r10
+    mov rdi, rcx
+    mov rsi, r9
     call string_proc_node_create_asm
     test rax, rax
-    je .done_add
+    je .done
 
-    mov rdx, rax
+    mov r10, rax        ; nuevo nodo
+
     mov rax, [r8]
     test rax, rax
-    jne .nonempty
+    jne .append
 
-    mov [r8], rdx
-    mov [r8+8], rdx
-    jmp .done_add
+    mov [r8], r10       ; list->first
+    mov [r8 + 8], r10   ; list->last
+    jmp .done
 
-.nonempty:
-    mov rcx, [r8+8]
-    mov [rcx], rdx
-    mov [rdx+8], rcx
-    mov [r8+8], rdx
+.append:
+    mov r11, [r8 + 8]
+    mov [r11], r10
+    mov [r10 + 8], r11
+    mov [r8 + 8], r10
 
-.done_add:
-    pop r10
-    pop r9
-    pop r8
-    pop rbp
+.done:
     ret
 
+===========================================================
 ; Concatenar todos los hashes del tipo y agregar nuevo nodo
+===========================================================
 string_proc_list_concat_asm:
-    push rbp
-    mov rbp, rsp
-    push r8
-    push r9
-    push r10
-    push r11
-    push r12
-    push r13
-    sub rsp, 8
+    string_proc_list_concat_asm:
+    test rdi, rdi
+    je .null_exit
 
-    mov r8, rdi
-    movzx r9d, sil
-    mov r10, rdx
-
-    test r8, r8
-    je .fail_concat
+    mov r8, rdi     ; list
+    movzx r9d, sil  ; type
+    mov r10, rdx    ; hash final
 
     mov rdi, 1
     call malloc
     test rax, rax
-    je .fail_concat
-
+    je .null_exit
     mov byte [rax], 0
-    mov r11, rax
-    mov r12, [r8]  ; current_node
+    mov r11, rax        ; new_hash
+
+    mov rax, [r8]       ; current = list->first
 
 .loop:
-    test r12, r12
-    je .loop_done
-    mov al, byte [r12+16]
-    cmp al, r9b
-    jne .skip
+    test rax, rax
+    je .after_loop
+
+    mov bl, [rax + 16]
+    cmp bl, r9b
+    jne .next
+
     mov rdi, r11
-    mov rsi, [r12+24]
+    mov rsi, [rax + 24]
     call str_concat
     test rax, rax
-    je .fail_free
+    je .fail_concat
 
-    mov r13, rax
     mov rdi, r11
+    mov r11, rax
     call free
-    mov r11, r13
-.skip:
-    mov r12, [r12]
+
+.next:
+    mov rax, [rax]
     jmp .loop
 
-.loop_done:
-    mov rdi, r8
-    movzx esi, r9b
-    mov rdx, r11
-    call string_proc_list_add_node_asm
+.after_loop:
+    test r10, r10
+    je .finish
 
+    mov rdi, r10
+    mov rsi, r11
+    call str_concat
+    test rax, rax
+    je .fail_concat
+
+    mov rdi, r11
+    mov r11, rax
+    call free
+
+.finish:
     mov rax, r11
-    add rsp, 8
-    pop r13
-    pop r12
-    pop r11
-    pop r10
-    pop r9
-    pop r8
-    pop rbp
     ret
 
-.fail_free:
+.fail_concat:
+    test r11, r11
+    je .null_exit
     mov rdi, r11
     call free
 
-.fail_concat:
+.null_exit:
     xor rax, rax
-    add rsp, 8
-    pop r13
-    pop r12
-    pop r11
-    pop r10
-    pop r9
-    pop r8
-    pop rbp
     ret
