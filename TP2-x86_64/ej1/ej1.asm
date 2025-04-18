@@ -73,7 +73,7 @@ string_proc_list_add_node_asm:
     mov r9, rdx        ; hash
     mov r10d, esi      ; type
 
-    mov dil, sil
+    mov dil, r10b
     mov rsi, r9
     call string_proc_node_create_asm
     test rax, rax
