@@ -55,7 +55,7 @@ string_proc_node_create_asm:
     mov byte [rax + 16], r11b        ; type
     mov qword [rax + 24], r10        ; hash duplicado
     ret
-    
+
 .fail_node:
     xor rax, rax
     ret
@@ -76,6 +76,12 @@ string_proc_list_add_node_asm:
     test rax, rax
     je .done_add
     mov r11, rax
+
+    test r8, r8
+    je .done_add
+
+    cmp r8, 0x10000
+    jb .done_add
 
     mov rax, [r8]
     test rax, rax
