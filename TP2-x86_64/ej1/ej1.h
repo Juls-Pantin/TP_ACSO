@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
-#define USE_ASM_IMPL 0 // Cambiar a 0 para usar la implementacion en C
+#define USE_ASM_IMPL 1 // Cambiar a 0 para usar la implementacion en C
 
 
 /** Lista **/
