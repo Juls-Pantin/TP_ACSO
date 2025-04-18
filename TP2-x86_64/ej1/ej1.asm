@@ -141,13 +141,14 @@ string_proc_list_concat_asm:
     jz .concat_fail
 
     mov r12, rax
-    cmp r11, r10
-    je .skip_free
+    test r11, r11
+    jz .skip_free
     mov rdi, r11
     call free
 
 .skip_free:
     mov r11, r12
+    jmp .return_concat
 
 .return_concat:
     mov rax, r11
