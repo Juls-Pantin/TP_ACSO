@@ -119,7 +119,7 @@ string_proc_list_concat_asm:
     mov rsi, [rax + 24]
     call str_concat
     test rax, rax
-    jz .concat_null
+    jz .concat_fail
 
     mov r12, rax
     mov rdi, r11
@@ -138,7 +138,7 @@ string_proc_list_concat_asm:
     mov rsi, r11
     call str_concat
     test rax, rax
-    jz .concat_null
+    jz .concat_fail
 
     mov r12, rax
     mov rdi, r11
@@ -148,6 +148,12 @@ string_proc_list_concat_asm:
 .return_concat:
     mov rax, r11
     ret
+
+.concat_fail:
+    test r11, r11
+    je .concat_null
+    mov rdi, r11
+    call free
 
 .concat_null:
     xor rax, rax
