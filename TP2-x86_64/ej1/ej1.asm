@@ -150,7 +150,7 @@ string_proc_list_concat_asm:
 
 .add_node:
     mov rdi, r8
-    mov rsi, r9b
+    movzx rsi, r9b
     mov rdx, r11
     call string_proc_list_add_node_asm
 
