@@ -18,7 +18,7 @@ ERRORDIFF=0
 
 ./tester
 
-$DIFFER salida.caso.propio.ej1.txt salida.catedra.ej1.txt > /Users/juliapantin/Documents/GitHub/TP_ACSO/TP2-x86_64/ej1
+$DIFFER salida.caso.propio.ej1.txt salida.catedra.ej1.txt > diff.ej1.txt
 if [ $? -ne 0 ]; then
   echo "  **Discrepancia en el ejercicio 1"
   ERRORDIFF=1
