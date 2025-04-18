@@ -33,18 +33,18 @@ string_proc_node_create_asm:
     test rsi, rsi
     je .fail
 
-    mov r8b, dil        ; type
-    mov r9, rsi         ; hash
+    mov r8b, dil     
+    mov r9, rsi     
 
     mov rdi, 32
     call malloc
     test rax, rax
     je .fail
 
-    mov qword [rax], NULL       ; next
-    mov qword [rax + 8], NULL   ; prev
-    mov byte [rax + 16], r8b    ; type
-    mov qword [rax + 24], r9    ; hash
+    mov qword [rax], NULL     
+    mov qword [rax + 8], NULL   
+    mov byte [rax + 16], r10b
+    mov qword [rax + 24], r11
     ret
 
 .fail:
@@ -94,40 +94,37 @@ string_proc_list_concat_asm:
     test rdi, rdi
     je .concat_null
 
-    mov r8, rdi        ; list
-    movzx r9d, sil     ; type
-    mov r10, rdx       ; hash
+    mov r8, rdi        
+    movzx r9d, sil    
+    mov r10, rdx      
 
     mov rdi, 1
     call malloc
     test rax, rax
     je .concat_null
     mov byte [rax], 0
-    mov r11, rax       ; new_hash
+    mov r11, rax      
 
-    mov rax, [r8]      ; current = list->first
+    mov rax, [r8]     
 
 .loop:
     test rax, rax
     je .combine
 
-    mov bl, [rax + 16]    ; current->type
+    mov bl, [rax + 16]   
     cmp bl, r9b
     jne .next
 
     mov rdi, r11
     mov rsi, [rax + 24]
     call str_concat
-    test rax, rax
-    je .fail
-
     mov r12, rax
     mov rdi, r11
     call free
     mov r11, r12
 
 .next:
-    mov rax, [rax]       ; current = current->next
+    mov rax, [rax]    
     jmp .loop
 
 .combine:
@@ -137,16 +134,9 @@ string_proc_list_concat_asm:
     mov rdi, r10
     mov rsi, r11
     call str_concat
-    test rax, rax
-    je .fail
-
     mov r12, rax
-    cmp r11, r10
-    je .skip_free
     mov rdi, r11
     call free
-
-.skip_free:
     mov r11, r12
 
 .return:
