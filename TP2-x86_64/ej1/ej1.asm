@@ -150,10 +150,18 @@ string_proc_list_concat_asm:
     ret
 
 .concat_fail:
-    test r11, r11
+    cmp r11, 0
     je .concat_null
-    ;mov rdi, r11
-    ;call free
+    mov al, byte [r11]
+    cmp al, 0
+    jne .maybe_free
+    mov al, byte [r11 + 1]
+    cmp al, 0
+    je .concat_null
+
+.maybe_free:
+    mov rdi, r11
+    call free
 
 .concat_null:
     xor rax, rax
