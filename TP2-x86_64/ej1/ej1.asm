@@ -11,9 +11,9 @@ section .text
     extern free
     extern str_concat
 
-==================================
+;==================================
 ; Crear lista vacía
-==================================
+;==================================
 string_proc_node_create_asm:
     mov rdi, 16
     call malloc
@@ -26,9 +26,9 @@ string_proc_node_create_asm:
     xor rax, rax
     ret
 
-==================================
+;==================================
 ; Crear nodo con tipo y hash
-==================================
+;==================================
 string_proc_node_create_asm:
     test rsi, rsi
     je .node_fail
@@ -51,9 +51,9 @@ string_proc_node_create_asm:
     xor rax, rax
     ret
 
-==================================
+;==================================
 ; Agregar nodo a lista
-==================================
+;==================================
 string_proc_list_add_node_asm:
     test rdi, rdi
     je .done
@@ -87,9 +87,9 @@ string_proc_list_add_node_asm:
 .done:
     ret
 
-===========================================================
+;===========================================================
 ; Concatenar todos los hashes del tipo y agregar nuevo nodo
-===========================================================
+;===========================================================
 string_proc_list_concat_asm:
     string_proc_list_concat_asm:
     test rdi, rdi
