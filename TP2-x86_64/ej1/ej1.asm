@@ -66,22 +66,16 @@ string_proc_node_create_asm:
 string_proc_list_add_node_asm:
     test rdi, rdi
     je .done_add
-    cmp rdi, 0x10000
-    jb .done_add
 
     mov r8, rdi        ; list
     mov r9, rdx        ; hash
-    mov r10d, esi      ; type
+    movzx edi, sil     ; pasar el type a dil correctamente
+    mov rsi, r9        ; pasar hash
 
-    mov dil, r10b
-    mov rsi, r9
     call string_proc_node_create_asm
     test rax, rax
     je .done_add
     mov r11, rax
-
-    cmp r8, 0x10000
-    jb .done_add
 
     mov rax, [r8]
     test rax, rax
