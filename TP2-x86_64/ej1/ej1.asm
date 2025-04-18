@@ -136,7 +136,7 @@ string_proc_list_concat_asm:
     mov rdi, 1
     call malloc
     cmp rax, 0
-    je .null
+    je .nulo
     mov byte [rax + OFFSET_NEXT], 0
     mov r14, rax        
 
