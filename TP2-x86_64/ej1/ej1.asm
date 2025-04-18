@@ -149,12 +149,12 @@ string_proc_list_concat_asm:
     mov r11, r12
 
 .add_node:
-    mov rdi, r8
-    movzx rsi, r9b
-    mov rdx, r11
+    mov rdi, r8     ; list
+    mov rsi, r9b    ; type
+    mov rdx, r11    ; hash
     call string_proc_list_add_node_asm
 
-    mov rax, r11
+    mov rax, r11    ; liberar el string concatenado
     ret
 
 .fail_concat:
