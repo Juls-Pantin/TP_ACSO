@@ -6,7 +6,8 @@ LIB_SRC  = diskimg.c inode.c unixfilesystem.c directory.c pathname.c  chksumfile
 DEPS = -MMD -MF $(@:.o=.d)
 WARNINGS = -fstack-protector -Wall -W -Wcast-qual -Wwrite-strings -Wextra -Wno-unused -Wno-unused-parameter -Wno-deprecated-declarations
 
-CFLAGS += -g $(WARNINGS) $(DEPS) -std=gnu99
+CFLAGS += -I/opt/homebrew/opt/openssl@3/include
+LDFLAGS += -L/opt/homebrew/opt/openssl@3/lib
 
 LIB_OBJ = $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(LIB_SRC)))
 LIB_DEP = $(patsubst %.o,%.d,$(LIB_OBJ))
