@@ -14,7 +14,7 @@
 int directory_findname(struct unixfilesystem *fs, const char *name,
 		int dirinumber, struct direntv6 *dirEnt) {
       struct inode dir_inode;
-      if (inode_iget(fs, 1, &dir_inode) == -1) {
+      if (inode_iget(fs, dirinumber, &dir_inode) == -1) {
         return -1;
     }
 
