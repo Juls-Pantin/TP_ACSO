@@ -11,7 +11,7 @@
 #define PTRS_PER_BLOCK (DISKIMG_SECTOR_SIZE / sizeof(uint16_t))
 
 /*
- * inode_iget - Read an inode from the disk image.
+ * TODO
  */
 int inode_iget(struct unixfilesystem *fs, int inumber, struct inode *inp) {
     if (inumber < 1) {

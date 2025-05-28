@@ -24,14 +24,13 @@ int directory_findname(struct unixfilesystem *fs, const char *name,
     while (1) {
         int nbytes = file_getblock(fs, 1, blockNum, data);
         if (nbytes <= 0) {
-            break; // no hay más bloques o error
+            break; 
         }
 
         int offset = 0;
         while (offset + sizeof(struct direntv6) <= nbytes) {
             struct direntv6 *entry = (struct direntv6 *)(data + offset);
 
-            // Comparar nombres con strncmp (no están null-terminated)
             if (strncmp(entry->d_name, name, sizeof(entry->d_name)) == 0) {
               memcpy(dirEnt, entry, sizeof(struct direntv6));
               return 0;
