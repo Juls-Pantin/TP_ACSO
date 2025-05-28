@@ -33,7 +33,7 @@ int inode_iget(struct unixfilesystem *fs, int inumber, struct inode *inp) {
 }
 
 /*
- * inode_indexlookup - Look up the block number for a given block index in an inode.
+ * TODO
  */
 int inode_indexlookup(struct unixfilesystem *fs, struct inode *inp, int blockNum) {
     if (blockNum < 0) {
