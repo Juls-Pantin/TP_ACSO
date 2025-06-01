@@ -13,7 +13,7 @@ void free_args(char **args, int count) {
 
 int main() {
 
-    setbuf(stdout, NULL);  // Desactiva el buffering de stdout
+    setbuf(stdout, NULL);
 
     char command[256];
     char *commands[MAX_COMMANDS];
@@ -21,10 +21,10 @@ int main() {
 
     while (1) 
     {
-        if (isatty(STDIN_FILENO)){printf("Shell> ");}
+        printf("Shell> ");
 
         if (fgets(command, sizeof(command), stdin) == NULL) {
-            break; // EOF o error
+            break;
         }
 
         for (char *p = command; *p != '\0'; p++) {
@@ -96,7 +96,7 @@ int main() {
                     close(pipefd[j]);
                 }
 
-                // nuevo parser con malloc y manejo correcto de comillas
+                // nuevo parseo con malloc y manejo de comillas
                 char *args[64];
                 int arg_count = 0;
                 char *cmd = commands[i];
@@ -163,7 +163,7 @@ int main() {
         }
 
         for (int i = 0; i < command_count; i++) {
-            // commands[i] apunta a `command` original, no hay que liberar
+            // commands[i] apunta a 'command' original, no hay que liberar
         }
 
         fflush(stdout);
