@@ -95,7 +95,7 @@ static void reuseThreadPoolTest() {
     pool.wait();
 }
 
-static void scheduleFromMultipleThreadsTest() {
+static void scheduleFromMultipleThreadsTest() { //test agregado por mi
     ThreadPool pool(4);
     vector<thread> launchers;
     for (int i = 0; i < 10; i++) {

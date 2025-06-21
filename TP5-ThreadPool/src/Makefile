@@ -1,11 +1,11 @@
-# Compiler settings
+# compilador
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall -pthread -g
 
-# Common source files
+# archivos src comunes
 SRC_COMMON = thread-pool.cc Semaphore.cc
 
-# Executables
+# executables
 EXECUTABLES = main tptest tpcustomtest
 
 all: main tptest tpcustomtest
@@ -18,6 +18,9 @@ tptest: tptest.cc $(SRC_COMMON)
 
 tpcustomtest: tpcustomtest.cc $(SRC_COMMON)
 	$(CXX) $(CXXFLAGS) -o tpcustomtest tpcustomtest.cc $(SRC_COMMON)
+
+custom:
+	$(CXX) $(CXXFLAGS) -o threadpool thread-pool.cc Semaphore.cc test_custom.cc
 
 clean:
 	rm -f $(EXECUTABLES)

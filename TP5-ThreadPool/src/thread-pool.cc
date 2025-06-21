@@ -1,9 +1,3 @@
-/**
- * File: thread-pool.cc
- * --------------------
- * Presents the implementation of the ThreadPool class.
- */
-
 #include "thread-pool.h"
 using namespace std;
 
@@ -18,17 +12,22 @@ ThreadPool::ThreadPool(size_t numThreads) : wts(numThreads), done(false) {
 
 
 void ThreadPool::schedule(const function<void(void)>& thunk) {
+    if (!thunk){
+        throw invalid_argument("Cannot schedule a null task"); // no se puede programar una tarea nula
+    }
+    if (done) {
+        throw runtime_error("Cannot schedule tasks on a destroyed ThreadPool");
+    }
     {
         unique_lock<mutex> lock(queueLock);
         taskQueue.push(thunk);
+        taskCv.notify_one();  // notifica al dispatcher que hay una nueva tarea
     }
 
     {
         unique_lock<mutex> lock(pendingMtx);
         pendingTasks++;
     }
-
-    taskCv.notify_one();  // avisamos al dispatcher que hay trabajo nuevo
 }
 
 void ThreadPool::dispatcher() {
@@ -72,7 +71,7 @@ void ThreadPool::worker(int id) {
 
         if (done) return;    // salir si se está destruyendo el thread pool
 
-        // Ejecuta el thunk asignado
+        // ejecuta el thunk asignado
         wts[id].thunk();
 
         {
@@ -80,7 +79,7 @@ void ThreadPool::worker(int id) {
             wts[id].available = true;
         }
 
-        // Actualizar la cantidad de tareas pendientes
+        // actualizar la cantidad de tareas pendientes
         bool notify = false;
         {
             unique_lock<mutex> lock(pendingMtx);
@@ -89,7 +88,7 @@ void ThreadPool::worker(int id) {
         }
 
         if (notify) {
-            pendingCv.notify_all();  // despierta al wait() si no quedan tareas
+            pendingCv.notify_all();  // "despierta" al wait() si no quedan tareas
         }
     }
 }
@@ -102,21 +101,24 @@ void ThreadPool::wait() {
 }
 
 ThreadPool::~ThreadPool() {
-    // Asegurarse de que se ejecutaron todas las tareas
+    // me aseguro que se ejecutaron todas las tareas
     wait();
 
-    // Marcar que estamos destruyendo el pool
+    // marco que estamos destruyendo el pool
     done = true;
 
-    // Despertar al dispatcher
-    taskCv.notify_all();
+    // "despierto" al dispatcher
+    {
+        unique_lock<mutex> lock(queueLock);
+        taskCv.notify_all();
+    }
 
-    // Despertar a todos los workers
+    // 'despierto" a todos los workers
     for (auto& worker : wts) {
         worker.sem.signal();
     }
 
-    // Esperar a que todos los threads terminen
+    // espero a que todos los threads terminen
     if (dt.joinable()) {
         dt.join();
     }
